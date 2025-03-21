@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:08:10 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/21 16:19:38 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/21 18:04:09 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ class BitcoinExchange
 	std::map<std::string, double> _exchangeRates;
 	//private methods
 	bool isValidDate(const std::string &date);
-	bool isValidValue(const std::string &value);
+	bool isNotLargeValue(const std::string &value);
+	bool isPositiveValue(const std::string &value);
 	std::string findClosestDate(const std::string &date);
 	
 	public:

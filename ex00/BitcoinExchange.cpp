@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:08:07 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/21 17:25:05 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/21 18:49:30 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,17 +62,34 @@ bool BitcoinExchange::isValidDate(const std::string &date)
 	ss >> year >> d1 >> month >> d2 >> day;
 	if (ss.fail() || d1 != '-' || d2 != '-')
 		return false;
-	if (month < 1 || month > 12 || day < 1 || day > 31)
+	if (month < 1 || month > 12 || day < 1 || day > 31 
+		|| (month == 2 && day > 29) 
+		|| (year%4 != 0 && month == 2 && day > 28)
+		|| ((month == 4 || month == 6 || month == 9 || month == 11) && day > 30))
 		return false;
 	return true;
 }
 
-bool BitcoinExchange::isValidValue(const std::string &value)
+bool BitcoinExchange::isPositiveValue(const std::string &value)
 {
 	try
 	{
 		double val = std::stod(value);
-		return val >= 0 && val <= 1000;
+		return val >= 0;
+	}
+	catch(...)
+	{
+		return false;
+	}
+	
+}
+
+bool BitcoinExchange::isNotLargeValue(const std::string &value)
+{
+	try
+	{
+		double val = std::stod(value);
+		return val <= 1000;
 	}
 	catch(...)
 	{
@@ -105,11 +122,33 @@ void BitcoinExchange::processInputFile(const std::string &filename)
 
 	while (std::getline(file, line))
 	{
+		line.erase(0, line.find_first_not_of(" \t\n\r"));
+		line.erase(line.find_last_not_of(" \t\n\r") + 1);
+		if (line.empty())
+			continue;
 		std::stringstream ss(line);
 		std::string date, valueStr;
 		if (!std::getline(ss, date, '|') || !std::getline(ss, valueStr))
 		{
 			std::cerr << "Error: bad input => " << date << "\n";
+			continue;
+		}
+		date = date.substr(0, date.find_last_not_of(" ") + 1); //trim spaces
+		valueStr = valueStr.substr(valueStr.find_first_not_of(" "));
+
+		if (!isValidDate(date))
+		{
+			std::cerr<< "Error: bad input => " << date << "\n";
+			continue; 
+		}
+		if (!isPositiveValue(valueStr))
+		{
+			std::cerr << "Error: not a positive number.\n";
+			continue;
+		}
+		if (!isNotLargeValue(valueStr))
+		{
+			std::cerr << "Error: too large a number.\n";
 			continue;
 		}
 		double value = std::stod(valueStr); 
