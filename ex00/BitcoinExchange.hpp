@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:08:10 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/21 18:04:09 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/21 20:24:23 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <sstream>
 #include <map>
 
-class BitcoinExchange
+class Btc
 {
 	std::map<std::string, double> _exchangeRates;
 	//private methods
@@ -27,10 +27,10 @@ class BitcoinExchange
 	std::string findClosestDate(const std::string &date);
 	
 	public:
-		BitcoinExchange();
-		BitcoinExchange(const  BitcoinExchange &other);
-		BitcoinExchange &operator=(const BitcoinExchange &other);
-		~BitcoinExchange();
+		Btc();
+		Btc(const  Btc &other);
+		Btc &operator=(const Btc &other);
+		~Btc();
 
 		void loadDatabase(const std::string &filename);
 		void processInputFile(const std::string &filename);

@@ -6,29 +6,29 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:08:07 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/21 18:49:30 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/21 20:26:30 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "BitcoinExchange.hpp"
 
-BitcoinExchange::BitcoinExchange() {}
+Btc::Btc() {}
 
-BitcoinExchange::BitcoinExchange(const BitcoinExchange &other)
+Btc::Btc(const Btc &other)
 {
 	this->_exchangeRates = other._exchangeRates;
 }
 
-BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange &other)
+Btc &Btc::operator=(const Btc &other)
 {
 	if(this !=&other)
 		this->_exchangeRates = other._exchangeRates;
 	return *this;
 }
 
-BitcoinExchange::~BitcoinExchange() {};
+Btc::~Btc() {};
 
-void BitcoinExchange::loadDatabase(const std::string &filename)
+void Btc::loadDatabase(const std::string &filename)
 {
 	std::ifstream file(filename);
 	if (!file)
@@ -52,7 +52,7 @@ void BitcoinExchange::loadDatabase(const std::string &filename)
 	file.close();
 }
 
-bool BitcoinExchange::isValidDate(const std::string &date)
+bool Btc::isValidDate(const std::string &date)
 {
 	if(date.length() != 10 || date[4] != '-' || date[7] != '-')
 		return false;
@@ -70,7 +70,7 @@ bool BitcoinExchange::isValidDate(const std::string &date)
 	return true;
 }
 
-bool BitcoinExchange::isPositiveValue(const std::string &value)
+bool Btc::isPositiveValue(const std::string &value)
 {
 	try
 	{
@@ -84,7 +84,7 @@ bool BitcoinExchange::isPositiveValue(const std::string &value)
 	
 }
 
-bool BitcoinExchange::isNotLargeValue(const std::string &value)
+bool Btc::isNotLargeValue(const std::string &value)
 {
 	try
 	{
@@ -97,7 +97,7 @@ bool BitcoinExchange::isNotLargeValue(const std::string &value)
 	}
 	
 }
-std::string BitcoinExchange::findClosestDate(const std::string &date)
+std::string Btc::findClosestDate(const std::string &date)
 {
 	auto it = _exchangeRates.lower_bound(date);
 	if (it ==  _exchangeRates.end() || it->first > date)
@@ -109,7 +109,7 @@ std::string BitcoinExchange::findClosestDate(const std::string &date)
 	return it->first;
 }
 
-void BitcoinExchange::processInputFile(const std::string &filename)
+void Btc::processInputFile(const std::string &filename)
 {
 	std::ifstream file(filename);
 	if (!file)
