@@ -36,10 +36,16 @@
 	bool RPN::validSeqs(const std::string& input)
 	{
 		for (unsigned long i = 0; i != input.length(); i++)
-			if (foundIn(numbers, input[i]) 
-				&& input[i + 1]
-				&& foundIn(numbers, input[i + 1]))
+		{
+			if ((foundIn(numbers, input[i]) 
+					&& input[i + 1]
+					&& foundIn(numbers, input[i + 1])) 
+				||
+				((input[i] == '-' || input[i] == '+')
+					&& foundIn(numbers, input[i + 1]))	
+			)
 				return false;
+		}
 		return true;
 	}
 
@@ -48,14 +54,14 @@
 		int sum = 0;
 		if (input.empty())
 			return sum;
-		foundIn(numbers, input[0]) ? sum++ :
-		foundIn(symbols, input[0]) ? sum-- : 
-		NULL;
 		unsigned int begin = 0;
 		for (; begin != input.length(); begin++)
 			if (!isspace(input[begin]))
 				break ;
-		for (char ch : input.substr(begin, input.length()))
+		foundIn(numbers, input[begin]) ? sum++ :
+		foundIn(symbols, input[begin]) ? sum-- : 
+		NULL;
+		for (char ch : input.substr(begin + 1, input.length()))
 		{
 			foundIn(numbers, ch) ? sum++ :
 			foundIn(symbols, ch) ? sum-- : 
@@ -79,4 +85,44 @@
 			st.pop();
 		}
 		return res;
+	};
+
+	int		RPN::calculate(std::stack<char> chr)
+	{
+		double res = 0.0;
+
+		std::stack<double> dbl;
+
+		while(!chr.empty())
+		{
+			double first;
+			double second;
+
+			char current = chr.top();
+			if (foundIn(numbers, current))
+			{
+				dbl.push((double)(current - '0'));
+				chr.pop();
+				continue ;
+			}
+			second = dbl.top();
+			dbl.pop();
+			first  =dbl.top();
+			dbl.pop();
+			if (current == '+')
+				res = first + second;
+			else if (current == '-')
+				res = first - second;
+			else if (current == '*')
+				res = first * second;
+			else 
+			{
+				if (second == 0.0)
+					return DIVISION_BY_ZERO;
+				res = first / second;
+			}
+			dbl.push(res);
+			chr.pop();
+		}
+		return ((res == std::floor(res)) ? (int)(res) : IS_DECIMAL);
 	};

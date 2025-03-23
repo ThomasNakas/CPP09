@@ -4,21 +4,23 @@
 #include <stack>
 #include <sstream>
 #include <stdexcept>
-#include <algorithm>
+#include <cmath>
 
 class RPN
 {
 	const std::string set = "0123456789+-*/";
 	const std::string numbers = "0123456789";
 	const std::string symbols = "+-*/";
-
+	
 	public:
+		enum cases {DIVISION_BY_ZERO = -214383648,
+					IS_DECIMAL = -214482648};
 		RPN();
 		~RPN();
 		RPN(const RPN& other);
 		RPN&	operator=(const RPN& other);
 
-		int		calculate(const std::string& input);
+		int		calculate(std::stack<char> chr);
 		//helpers
 		bool	foundIn(const std::string &set, const char ch);
 		//checkers
