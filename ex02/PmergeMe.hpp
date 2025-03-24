@@ -1,3 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   PmergeMe.hpp                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/24 19:52:54 by tnakas            #+#    #+#             */
+/*   Updated: 2025/03/24 19:52:55 by tnakas           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
 #pragma once
 
 #include <iostream>
@@ -8,6 +21,8 @@
 #include <algorithm>
 #include <cstdlib>
 #include <cctype>
+#include <utility>
+#include <cmath>
 class PmergeMe
 {
 	public:
@@ -17,25 +32,24 @@ class PmergeMe
 		PmergeMe& operator=(const PmergeMe& other);
 		// helpers
 		std::vector<int> fastSort(const std::vector<int>);
+		int	spPow(int n1, int n2);
 		//argv checker
-		bool strIsNumber(const std::string&);
-		bool arrOfStrAllNum(const std::string arr[], size_t size);
-
-		bool strIsPosInt(const std::string& );
-		bool arrOfPosInt(const std::string arr[], size_t size);
+		bool IsNbr(const std::string&);
+		bool IsPInt(const std::string& );
 
 		// print a vector
 		void printRes(const std::vector<int>);
-		//print the time for vector and dque
-		//template function
-		template <typename Func, typename... Args>
-		auto timeAFunction(Func&& func, Args&&... args, int type)
+		struct Group
 		{
-			auto start = std::chrono::high_resolustion_clock::now();
-			func(std::forward<Args>(args)...);
-			auto end = std::chrono::high_sesolution_clock::now();
-			return std::chrono::duration<double, std::micro>(end - start).count();
-		}
+			std::vector<int> elements;
+			int representator;
+			size_t level;
 
-
+			Group();
+			Group(const std::vector<int> elems);
+			Group(const Group& other);
+			Group& operator=(const Group& other);
+			~Group();
+		};
+		std::vector<Group> mergeGroups(std::vector<Group> groups);
 };

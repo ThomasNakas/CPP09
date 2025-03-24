@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:08:07 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/21 20:26:30 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/24 12:37:16 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void Btc::loadDatabase(const std::string &filename)
 	std::ifstream file(filename);
 	if (!file)
 	{
-		std::cerr << "Error: coould not open database file.\n";
+		std::cerr << "Error: could not open database file.\n";
 		exit(1);
 	}
 	std::string line;
