@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:54 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/24 19:52:55 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/25 10:57:08 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,19 @@
 class PmergeMe
 {
 	public:
+		size_t l = 0;
+		struct Group
+		{
+			size_t level = 0;
+			std::vector<int> elements;
+			int representator;
+
+			Group();
+			Group(const std::vector<int> elems);
+			Group(const Group& other);
+			Group& operator=(const Group& other);
+			~Group();
+		};
 		PmergeMe();
 		~PmergeMe();
 		PmergeMe(const PmergeMe& other);
@@ -39,17 +52,6 @@ class PmergeMe
 
 		// print a vector
 		void printRes(const std::vector<int>);
-		struct Group
-		{
-			std::vector<int> elements;
-			int representator;
-			size_t level;
-
-			Group();
-			Group(const std::vector<int> elems);
-			Group(const Group& other);
-			Group& operator=(const Group& other);
-			~Group();
-		};
+		void printRes(const std::vector<Group>);
 		std::vector<Group> mergeGroups(std::vector<Group> groups);
 };
