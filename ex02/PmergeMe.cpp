@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:47 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/25 15:49:06 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/25 17:02:00 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ PmergeMe::Group& PmergeMe::Group::operator=(const PmergeMe::Group& other)
 	return *this;
 }
 PmergeMe::Group::~Group(){};
+
 //========Helper Functions====================
 void PmergeMe::printRes(const std::vector<int> vec)
 {
@@ -98,11 +99,12 @@ std::vector<int> PmergeMe::fastSort(const std::vector<int> numbers)
 	return temp;
 }
 
-std::vector<PmergeMe::Group> PmergeMe::mergeGroups(std::vector<PmergeMe::Group> groups)
+//========Logic Fucntions=======================
+std::vector<PmergeMe::Group> PmergeMe::pairMergeSorting(std::vector<PmergeMe::Group> groups)
 {
 	while (groups.size() > 3)
 	{
-		std::vector<Group> mergeGroups;
+		std::vector<Group> pairMergeSorting;
 		// for (const PmergeMe::Group& gr : groups)
 		// {
 		// 	std::cout << "[";
@@ -117,14 +119,14 @@ std::vector<PmergeMe::Group> PmergeMe::mergeGroups(std::vector<PmergeMe::Group> 
 			mergedElemets.insert(mergedElemets.end(),
 			groups[i + 1].lms.begin(), 
 			groups[i + 1].lms.end());
-			mergeGroups.emplace_back(mergedElemets);
+			pairMergeSorting.emplace_back(mergedElemets);
 		}
 		if (groups.size() % 2 != 0)
-			mergeGroups.emplace_back(groups[groups.size() - 1].lms);
-		for (size_t i = 0; i + 1 < mergeGroups.size(); i+=2)
-			if (mergeGroups[i].repr > mergeGroups[i + 1].repr)
-				std::swap(mergeGroups[i], mergeGroups[i + 1]);
-	groups = mergeGroups;
+			pairMergeSorting.emplace_back(groups[groups.size() - 1].lms);
+		for (size_t i = 0; i + 1 < pairMergeSorting.size(); i+=2)
+			if (pairMergeSorting[i].repr > pairMergeSorting[i + 1].repr)
+				std::swap(pairMergeSorting[i], pairMergeSorting[i + 1]);
+	groups = pairMergeSorting;
 	for (const PmergeMe::Group& gr : groups)
 		{
 			std::cout << "[";
@@ -135,13 +137,13 @@ std::vector<PmergeMe::Group> PmergeMe::mergeGroups(std::vector<PmergeMe::Group> 
 		std::cout << std::endl;
 	l++;
 	std::cout << "Level: "<< l << std::endl;
-	std::cout << "the size: " <<mergeGroups.size() << std::endl;
+	std::cout << "the size: " << pairMergeSorting.size() << std::endl;
 	}
 	
 	return groups;
 }
 
-void PmergeMe::BFindAndUpdateVec(std::vector<Group>& vec, 
+void PmergeMe::BinarySortOne(std::vector<Group>& vec, 
 	int start, int end, Group element)
 {
 	while((end - start) + 1 > 2)
@@ -167,7 +169,38 @@ void PmergeMe::BFindAndUpdateVec(std::vector<Group>& vec,
 	else
 		vec.insert(vec.begin() + start, element);
 }
-//Helper functions outside of class
+
+void PmergeMe::insertBOneToAVec (const std::vector<PmergeMe::Group> bSec, 
+std::vector<PmergeMe::Group>& aSec)
+{
+	aSec.insert(aSec.begin(), bSec[0]);
+};
+
+void PmergeMe::SplitTheMergedOneLevel(std::vector<PmergeMe::Group>& groups)
+{
+	for (size_t i = 0; i != groups.size() ; i++)
+	{
+		if(groups[i].lms.size() == (size_t)spPow(2, this->l))
+		{
+			Group first;
+			Group second;
+			for (size_t j = 0; j != groups[j].lms.size(); j++)
+			{
+				if(j >= groups[i].lms.size() / 2 - 1)
+				{
+					first.lms.push_back(groups[i].lms[i]);
+					continue;
+				}
+				second.lms.push_back(groups[i].lms[i]);
+			}
+			groups.erase(groups.begin() + i);
+			groups.insert(groups.begin() + i, second);
+			groups.insert(groups.begin() + i, first);
+		}
+	}
+	this->l--;
+}
+//=======Outside Functions======================
 int	spPow(int n1, int n2)
 {
 	return ((int)pow((long double)n1, (long double)n2));
@@ -177,7 +210,7 @@ int jSeq(int n)
 	return ((spPow(2, n) - spPow(-1, n))/3);
 }
 
-void BFindAndUpdateVec(std::vector<int>& vec, 
+void BinarySortOne(std::vector<int>& vec, 
 	int start, int end, int element)
 {
 	while ((end-start) + 1 > 2)

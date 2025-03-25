@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:54 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/25 14:40:02 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/25 17:07:41 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ class PmergeMe
 		size_t l = 0;
 		struct Group
 		{
-			size_t level = 0;
 			std::vector<int> lms;
 			int repr;
 
@@ -54,16 +53,16 @@ class PmergeMe
 		void printRes(const std::vector<Group>);
 		// merge functions
 		// a function that run into a vec of group
-		std::vector<Group> mergeGroups(std::vector<Group> groups);
-		void BFindAndUpdateVec(std::vector<Group>& vec, 
+		std::vector<Group> pairMergeSorting(std::vector<Group> groups);
+		void BinarySortOne(std::vector<Group>& vec, 
 			int start, int end, Group element);
 		void insertBOneToAVec (const std::vector<Group> bSec, 
 				std::vector<Group>& aSec);
+		void SplitTheMergedOneLevel(std::vector<Group>& groups);
 	};
 	int	spPow(int n1, int n2);
 	int jSeq(int n);
-	void BFindAndUpdateVec(std::vector<int>& vec, 
+	void BinarySortOne(std::vector<int>& vec, 
 		int start, int end, int element);
 	void insertBOneToAVec (const std::vector<int> bSec, 
 		std::vector<int>& aSec);
-	// the given vector datatype
