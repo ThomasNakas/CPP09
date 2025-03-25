@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:47 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/25 22:32:55 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/25 22:44:14 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,40 +115,25 @@ std::vector<PmergeMe::Group> PmergeMe::pairMergeSorting(std::vector<PmergeMe::Gr
 {
 	while (groups.size() > 3)
 	{
-		std::vector<Group> pairMergeSorting;
-		// for (const PmergeMe::Group& gr : groups)
-		// {
-		// 	std::cout << "[";
-		// 	for (int nbr : gr.lms)
-		// 		std::cout << nbr << " ";
-		// 	std::cout << "]";
-		// }
-		// std::cout << std::endl;
+		std::vector<Group> tempGroup;
 		for (size_t i = 0; i + 1 < groups.size(); i+=2)
 		{
 			std::vector<int> mergedElemets = groups[i].lms;
 			mergedElemets.insert(mergedElemets.end(),
 			groups[i + 1].lms.begin(), 
 			groups[i + 1].lms.end());
-			pairMergeSorting.emplace_back(mergedElemets);
+			tempGroup.emplace_back(mergedElemets);
 		}
 		if (groups.size() % 2 != 0)
-			pairMergeSorting.emplace_back(groups[groups.size() - 1].lms);
-		for (size_t i = 0; i + 1 < pairMergeSorting.size(); i+=2)
-			if (pairMergeSorting[i].repr > pairMergeSorting[i + 1].repr && pairMergeSorting[i].lms.size() == pairMergeSorting[i + 1].lms.size())
-				std::swap(pairMergeSorting[i], pairMergeSorting[i + 1]);
-	groups = pairMergeSorting;
-	for (const PmergeMe::Group& gr : groups)
-		{
-			std::cout << "[";
-			for (int nbr : gr.lms)
-				std::cout << nbr << " ";
-			std::cout << "]";
-		}
-		std::cout << std::endl;
+			tempGroup.emplace_back(groups[groups.size() - 1].lms);
+		for (size_t i = 0; i + 1 < tempGroup.size(); i+=2)
+			if (tempGroup[i].repr > tempGroup[i + 1].repr && tempGroup[i].lms.size() == tempGroup[i + 1].lms.size())
+				std::swap(tempGroup[i], tempGroup[i + 1]);
+	groups = tempGroup;
+	printRes(groups);
 	l++;
 	std::cout << "Level: "<< l << std::endl;
-	std::cout << "the size: " << pairMergeSorting.size() << std::endl;
+	std::cout << "the size: " << tempGroup.size() << std::endl;
 	}
 	
 	return groups;
