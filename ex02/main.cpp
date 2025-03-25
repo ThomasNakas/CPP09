@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:39 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/25 18:52:42 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/25 22:34:58 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int main(int argc, char* argv[])
 	std::vector<std::vector<PmergeMe::Group>> pair;
 	//vector
 	std::vector<int> numbers;
+	std::vector<int> res;
 	//deque
 	if (argc < 2)
 	{
@@ -41,23 +42,23 @@ int main(int argc, char* argv[])
 	for (int i = 1; i < argc; i++)
 		numbers.push_back(std::stoi(argv[i]));
 	//-----
+	for (size_t i =0; i + 1 < numbers.size(); i++)
+		if (numbers[i] > numbers[i + 1])
+			std::swap(numbers[i], numbers[i + 1]);
 	for (size_t i = 0; i < numbers.size(); i++)
 		groups.emplace_back(std::vector<int>{numbers[i]});
-	// if (numbers.size() % 2 != 0)
-	// 	groups.emplace_back(std::vector<int>{numbers.back()});
 	std::vector<PmergeMe::Group> sortedGroups = pMM.pairMergeSorting(groups);
 	// std::cout << "main print" << std::endl;
-
-	pMM.printRes(sortedGroups);
-	PmergeMe::Group g;
-	g.lms = {2, 14};
-	pMM.BinarySortOne(sortedGroups, 0, sortedGroups.size() - 1, g),
-	std::cout << "main print" << std::endl;
-	pMM.printRes(sortedGroups);
-	pMM.SplitTheMergedOneLevel(sortedGroups);
-	pMM.printRes(sortedGroups);
-	pair = pMM.pairOfBAndA(sortedGroups);
-	pMM.printRes(pair);
+	res = pMM.sortedVectorOfGroups(sortedGroups);
+	// PmergeMe::Group g;
+	// g.lms = {2, 14};
+	// pMM.BinarySortOne(sortedGroups, 0, sortedGroups.size() - 1, g),
+	// std::cout << "main print" << std::endl;
+	// pMM.printRes(sortedGroups);
+	// pMM.SplitTheMergedOneLevel(sortedGroups);
+	// pMM.printRes(sortedGroups);
+	// pair = pMM.pairOfBAndA(sortedGroups);
+	// pMM.printRes(pair);
 	// BinarySortOne(numbers, 0, numbers.size() - 1, 14);
 	// pMM.printRes(numbers);
 	// std::cout << std::endl;
@@ -65,7 +66,7 @@ int main(int argc, char* argv[])
 	pMM.printRes(numbers);
 	std::cout << std::endl;
 	std::cout << "After:  ";
-	pMM.printRes(pMM.fastSort(numbers));
+	pMM.printRes(pMM.fastSort(res));
 	std::cout << std::endl;
 
 	// std::cout << "//==========\n";
@@ -79,3 +80,11 @@ int main(int argc, char* argv[])
 // to split according to the reccursion level
 // as input can have a vector of group
 // is going to every element is checking if the element.size() == sPow(2, level)
+// I need a1 b1 b2 b3 .....
+// if position is j
+// sorted vector of groups 
+// a1 b1 b2 b3 . . .
+// how I can find the position ?
+// serial search on the position (same position different sequence)
+// απο jacobsthal binary (Jn-1 Jn - 1)  δηλαδη σε όλη αυτήν την πραγματική διαφορά
+// both of the vectors are dynamic

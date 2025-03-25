@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:54 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/25 18:51:00 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/25 22:15:21 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,13 @@ class PmergeMe
 			Group& operator=(const Group& other);
 			~Group();
 		};
+		
+		//Default Constructors
 		PmergeMe();
 		~PmergeMe();
 		PmergeMe(const PmergeMe& other);
 		PmergeMe& operator=(const PmergeMe& other);
+		
 		// helpers
 		std::vector<int> fastSort(const std::vector<int>);
 		//argv checker
@@ -60,13 +63,15 @@ class PmergeMe
 		std::vector<Group> pairMergeSorting(std::vector<Group> groups);
 		void BinarySortOne(std::vector<Group>& vec, 
 			int start, int end, Group element);
-		void insertBOneToAVec (const std::vector<Group> bSec, 
+		void insertBOneToAVec (std::vector<Group> bSec, 
 				std::vector<Group>& aSec);
 		void SplitTheMergedOneLevel(std::vector<Group>& groups);
 		std::vector<std::vector<PmergeMe::Group>> pairOfBAndA(std::vector<Group> gr);
+		int findIndexInBFromPosition(std::vector<PmergeMe::Group> groups, int position);
+		std::vector<int> sortedVectorOfGroups(std::vector<Group> groups);
 	};
 	int	spPow(int n1, int n2);
-	int jSeq(int n);
+	int Jacobsthal(int n);
 	void BinarySortOne(std::vector<int>& vec, 
 		int start, int end, int element);
 	void insertBOneToAVec (const std::vector<int> bSec, 

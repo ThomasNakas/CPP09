@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:47 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/25 18:55:11 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/25 22:32:55 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ std::vector<PmergeMe::Group> PmergeMe::pairMergeSorting(std::vector<PmergeMe::Gr
 		if (groups.size() % 2 != 0)
 			pairMergeSorting.emplace_back(groups[groups.size() - 1].lms);
 		for (size_t i = 0; i + 1 < pairMergeSorting.size(); i+=2)
-			if (pairMergeSorting[i].repr > pairMergeSorting[i + 1].repr)
+			if (pairMergeSorting[i].repr > pairMergeSorting[i + 1].repr && pairMergeSorting[i].lms.size() == pairMergeSorting[i + 1].lms.size())
 				std::swap(pairMergeSorting[i], pairMergeSorting[i + 1]);
 	groups = pairMergeSorting;
 	for (const PmergeMe::Group& gr : groups)
@@ -181,10 +181,11 @@ void PmergeMe::BinarySortOne(std::vector<Group>& vec,
 		vec.insert(vec.begin() + start, element);
 }
 
-void PmergeMe::insertBOneToAVec (const std::vector<PmergeMe::Group> bSec, 
+void PmergeMe::insertBOneToAVec (std::vector<PmergeMe::Group> bSec, 
 std::vector<PmergeMe::Group>& aSec)
 {
 	aSec.insert(aSec.begin(), bSec[0]);
+	bSec.erase(bSec.begin()+ 0);
 };
 
 void PmergeMe::SplitTheMergedOneLevel(std::vector<PmergeMe::Group>& groups)
@@ -239,17 +240,70 @@ std::vector<std::vector<PmergeMe::Group>> PmergeMe::pairOfBAndA(std::vector<Pmer
 		if (groups[i].lms.size() == (size_t)spPow(2, l))
 			groups[i].position = b_position++;
 		else
-		groups[i].position = -1;
+			groups[i].position = -1;
 		pair[1].push_back(groups[i]);
 	}
 	return pair;
+};
+int PmergeMe::findIndexInBFromPosition(std::vector<PmergeMe::Group> groups, int position)
+{
+	size_t i;
+	for (i = 0; i != groups.size() ; i++)
+		if (groups[i].position == position)
+			return (int)i;
+	return -2;
+};
+std::vector<int> PmergeMe::sortedVectorOfGroups(std::vector<PmergeMe::Group> groups)
+{
+	std::vector<int> res;
+	std::vector<std::vector<Group>> pair;
+
+	while(l != 0)
+	{
+		int n = 3;
+		int J;
+		int maxBIndexSequence;
+		SplitTheMergedOneLevel(groups);
+		pair = pairOfBAndA(groups);
+		maxBIndexSequence = pair[A].size();
+		insertBOneToAVec(pair[B], pair[A]);
+		J = Jacobsthal(n);
+		while (findIndexInBFromPosition(pair[B], J) != -2)
+		{
+			while (J > Jacobsthal(n - 1))
+			{
+				size_t b_index;
+				size_t a_index;
+				// I will go find the specific element from b by the given position take it
+				b_index = findIndexInBFromPosition(pair[B], J);
+				a_index = findIndexInBFromPosition(pair[A], J);
+				BinarySortOne(pair[A],Jacobsthal(n - 1), a_index - 1, pair[B][b_index]);
+				J--;
+			}
+			n++;
+			if ((J = Jacobsthal(n)) > maxBIndexSequence)
+				J = maxBIndexSequence;
+		}
+		size_t i = -1;
+		while (pair[B][++i].position != -2)
+			break ;
+		while (pair[B][i++].position == -2)
+			pair[A].push_back(pair[B][i]);
+		groups = pair[A];
+		printRes(pair[A]);
+	}
+	//b1 a1 a2 a3 a4
+	//b2 b3 b4 b5
+	for (size_t i = 0; i != groups.size(); i++)
+		res.push_back(groups[i].lms[0]);
+	return res;
 };
 //=======Outside Functions======================
 int	spPow(int n1, int n2)
 {
 	return ((int)pow((long double)n1, (long double)n2));
 };
-int jSeq(int n)
+int Jacobsthal(int n)
 {
 	return ((spPow(2, n) - spPow(-1, n))/3);
 }
