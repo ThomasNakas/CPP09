@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:39 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/25 17:25:51 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/25 18:52:42 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@
 int main(int argc, char* argv[])
 {
 	PmergeMe pMM;
-	std::vector<PmergeMe::Group> groups; 
+	std::vector<PmergeMe::Group> groups;
+	std::vector<std::vector<PmergeMe::Group>> pair;
 	//vector
 	std::vector<int> numbers;
 	//deque
@@ -55,9 +56,11 @@ int main(int argc, char* argv[])
 	pMM.printRes(sortedGroups);
 	pMM.SplitTheMergedOneLevel(sortedGroups);
 	pMM.printRes(sortedGroups);
-	BinarySortOne(numbers, 0, numbers.size() - 1, 14);
-	pMM.printRes(numbers);
-	std::cout << std::endl;
+	pair = pMM.pairOfBAndA(sortedGroups);
+	pMM.printRes(pair);
+	// BinarySortOne(numbers, 0, numbers.size() - 1, 14);
+	// pMM.printRes(numbers);
+	// std::cout << std::endl;
 	std::cout << "Before: ";
 	pMM.printRes(numbers);
 	std::cout << std::endl;

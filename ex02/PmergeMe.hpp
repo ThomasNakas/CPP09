@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:54 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/25 17:07:41 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/25 18:51:00 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,13 @@ class PmergeMe
 {
 	public:
 		size_t l = 0;
+		enum type{A,B};
 		struct Group
 		{
 			std::vector<int> lms;
 			int repr;
+			int position;
+			int sequence;
 
 			Group();
 			Group(const std::vector<int> elems);
@@ -51,6 +54,7 @@ class PmergeMe
 		// print a vector
 		void printRes(const std::vector<int>);
 		void printRes(const std::vector<Group>);
+		void printRes(const std::vector<std::vector<Group>>);
 		// merge functions
 		// a function that run into a vec of group
 		std::vector<Group> pairMergeSorting(std::vector<Group> groups);
@@ -59,6 +63,7 @@ class PmergeMe
 		void insertBOneToAVec (const std::vector<Group> bSec, 
 				std::vector<Group>& aSec);
 		void SplitTheMergedOneLevel(std::vector<Group>& groups);
+		std::vector<std::vector<PmergeMe::Group>> pairOfBAndA(std::vector<Group> gr);
 	};
 	int	spPow(int n1, int n2);
 	int jSeq(int n);
@@ -66,3 +71,6 @@ class PmergeMe
 		int start, int end, int element);
 	void insertBOneToAVec (const std::vector<int> bSec, 
 		std::vector<int>& aSec);
+	// I need a transition from int to sequence
+	// which sequence has insice the value the position
+	// in the sequence and the type of the sequence

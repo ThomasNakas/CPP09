@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:47 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/25 17:25:37 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/25 18:55:11 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ PmergeMe& PmergeMe::operator=(const PmergeMe& other)
 	return *this;
 };
 //========Group Default Functions=============
-PmergeMe::Group::Group()
+PmergeMe::Group::Group() : position(0), sequence(0)
 {
 };
 PmergeMe::Group::Group(std::vector<int> lms) : lms(lms), repr(lms.back())
@@ -41,6 +41,8 @@ PmergeMe::Group::Group(const PmergeMe::Group& other)
 {
 	this->lms = other.lms;
 	this->repr = other.repr;
+	this->position = other.position;
+	this->sequence = other.sequence;
 }
 PmergeMe::Group& PmergeMe::Group::operator=(const PmergeMe::Group& other)
 {
@@ -48,10 +50,13 @@ PmergeMe::Group& PmergeMe::Group::operator=(const PmergeMe::Group& other)
 	{
 		this->lms = other.lms;
 		this->repr = other.repr;
+		this->position = other.position;
+		this->sequence = other.sequence;
 	}
 	return *this;
 }
 PmergeMe::Group::~Group(){};
+
 
 //========Helper Functions====================
 void PmergeMe::printRes(const std::vector<int> vec)
@@ -74,7 +79,13 @@ void PmergeMe::printRes(const std::vector<PmergeMe::Group> groups)
 	}
 	std::cout << std::endl;
 }
-
+void PmergeMe::printRes(const std::vector<std::vector<PmergeMe::Group>> pair)
+{
+	std::cout << "A sequence: ";
+	printRes(pair[0]);
+	std::cout << "B sequence: ";
+	printRes(pair[1]);
+};
 //========Checker functions=====================
 bool PmergeMe::IsNbr(const std::string& str)
 {
@@ -205,6 +216,34 @@ void PmergeMe::SplitTheMergedOneLevel(std::vector<PmergeMe::Group>& groups)
 	std::cout << "1\n";
 	this->l--;
 }
+
+std::vector<std::vector<PmergeMe::Group>> PmergeMe::pairOfBAndA(std::vector<PmergeMe::Group> groups)
+{
+	std::vector<std::vector<Group>> pair;
+	std::vector<Group> a;
+	std::vector<Group> b;
+	int a_position = 0;
+	int b_position = 0;
+	pair.push_back(b);
+	pair.push_back(a);
+	for (size_t i = 0; i != groups.size(); i++)
+	{
+		if (groups[i].lms.size() == (size_t)spPow(2, l) && i % 2 != 0)
+		{
+			groups[i].sequence = A;
+			groups[i].position = a_position++;
+			pair[0].push_back(groups[i]);
+			continue ;
+		}
+		groups[i].sequence = B;
+		if (groups[i].lms.size() == (size_t)spPow(2, l))
+			groups[i].position = b_position++;
+		else
+		groups[i].position = -1;
+		pair[1].push_back(groups[i]);
+	}
+	return pair;
+};
 //=======Outside Functions======================
 int	spPow(int n1, int n2)
 {
