@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:47 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/25 13:51:49 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/25 15:49:06 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,21 +33,21 @@ PmergeMe& PmergeMe::operator=(const PmergeMe& other)
 PmergeMe::Group::Group()
 {
 };
-PmergeMe::Group::Group(std::vector<int> elems) : elements(elems), representator(elems.back())
+PmergeMe::Group::Group(std::vector<int> lms) : lms(lms), repr(lms.back())
 {
 };
 
 PmergeMe::Group::Group(const PmergeMe::Group& other)
 {
-	this->elements = other.elements;
-	this->representator = other.representator;
+	this->lms = other.lms;
+	this->repr = other.repr;
 }
 PmergeMe::Group& PmergeMe::Group::operator=(const PmergeMe::Group& other)
 {
 	if (this != &other)
 	{
-		this->elements = other.elements;
-		this->representator = other.representator;
+		this->lms = other.lms;
+		this->repr = other.repr;
 	}
 	return *this;
 }
@@ -56,8 +56,11 @@ PmergeMe::Group::~Group(){};
 void PmergeMe::printRes(const std::vector<int> vec)
 {
 	for(int n : vec)
-		std::cout << n << " ";
-	std::cout << std::endl;
+	{
+		std::cout << n; 
+		if (n != vec[vec.size() -1])
+			std::cout << " ";
+	}
 }
 
 void PmergeMe::printRes(const std::vector<PmergeMe::Group> groups)
@@ -65,9 +68,7 @@ void PmergeMe::printRes(const std::vector<PmergeMe::Group> groups)
 	for (Group gr : groups)
 	{
 		std::cout << "[";
-		for (int n : gr.elements)
-			if (n != gr.elements[gr.elements.size()])
-				std::cout << n << " ";
+		printRes(gr.lms);
 		std::cout << "]";
 	}
 	std::cout << std::endl;
@@ -102,32 +103,32 @@ std::vector<PmergeMe::Group> PmergeMe::mergeGroups(std::vector<PmergeMe::Group> 
 	while (groups.size() > 3)
 	{
 		std::vector<Group> mergeGroups;
-		for (const PmergeMe::Group& gr : groups)
-		{
-			std::cout << "[";
-			for (int nbr : gr.elements)
-				std::cout << nbr << " ";
-			std::cout << "]";
-		}
-		std::cout << std::endl;
+		// for (const PmergeMe::Group& gr : groups)
+		// {
+		// 	std::cout << "[";
+		// 	for (int nbr : gr.lms)
+		// 		std::cout << nbr << " ";
+		// 	std::cout << "]";
+		// }
+		// std::cout << std::endl;
 		for (size_t i = 0; i + 1 < groups.size(); i+=2)
 		{
-			std::vector<int> mergedElemets = groups[i].elements;
+			std::vector<int> mergedElemets = groups[i].lms;
 			mergedElemets.insert(mergedElemets.end(),
-			groups[i + 1].elements.begin(), 
-			groups[i + 1].elements.end());
+			groups[i + 1].lms.begin(), 
+			groups[i + 1].lms.end());
 			mergeGroups.emplace_back(mergedElemets);
 		}
 		if (groups.size() % 2 != 0)
-			mergeGroups.emplace_back(groups[groups.size() - 1].elements);
+			mergeGroups.emplace_back(groups[groups.size() - 1].lms);
 		for (size_t i = 0; i + 1 < mergeGroups.size(); i+=2)
-			if (mergeGroups[i].representator > mergeGroups[i + 1].representator)
+			if (mergeGroups[i].repr > mergeGroups[i + 1].repr)
 				std::swap(mergeGroups[i], mergeGroups[i + 1]);
 	groups = mergeGroups;
 	for (const PmergeMe::Group& gr : groups)
 		{
 			std::cout << "[";
-			for (int nbr : gr.elements)
+			for (int nbr : gr.lms)
 				std::cout << nbr << " ";
 			std::cout << "]";
 		}
@@ -138,6 +139,33 @@ std::vector<PmergeMe::Group> PmergeMe::mergeGroups(std::vector<PmergeMe::Group> 
 	}
 	
 	return groups;
+}
+
+void PmergeMe::BFindAndUpdateVec(std::vector<Group>& vec, 
+	int start, int end, Group element)
+{
+	while((end - start) + 1 > 2)
+	{
+		if (element.repr > vec[(end - start) / 2 + start].repr)
+			start = (end - start) / 2 + 1 + start;
+		else
+			end = (end - start) / 2 - 1 + start;
+	}
+	if (element.repr >= vec[end].repr)
+	{
+		std::cout << "true\n";
+		std::cout << element.repr << " " << vec[end].repr << std::endl;
+		if ((size_t)end == vec.size() - 1)
+		{
+			vec.push_back(element);
+			return ;
+		}
+		vec.insert(vec.begin() + end + 1, element);
+	}
+	else if (element.repr < vec[end].repr && element.repr >= vec[start].repr)
+		vec.insert(vec.begin() + end, element);
+	else
+		vec.insert(vec.begin() + start, element);
 }
 //Helper functions outside of class
 int	spPow(int n1, int n2)
@@ -162,27 +190,36 @@ void BFindAndUpdateVec(std::vector<int>& vec,
 		for (int i = start; i <= end; i++)
 			std::cout << i << " ";
 		std::cout << std::endl;
-		// BFindPos(vec, start, end, element);
 	}
-	// for (int i = start; i <= end; i++)
-	// 		std::cout << i << " ";
-	// std::cout << std::endl;
+	std::cout << "start, end :" << start << ", " << end << std::endl;
+	std::cout << "el: " << element << " ,vec[end]: " << vec[end] << " ,vec[start]: " << vec[start] << std::endl;
+	
+
 	if (element >= vec[end])
 	{
+		std::cout << "1\n";
 		if ((size_t)end == vec.size() -1)
 		{
+			std::cout << "2\n";
 			vec.push_back(element);
 			return ;
 		}
 		vec.insert(vec.begin() + end + 1, element);
 	}
-	else if (element < vec[end] && element >= vec[start])
+	else if (start != end && element < vec[end] && element >= vec[start])
+	{
+		std::cout << "3\n";
 		vec.insert(vec.begin() + end, element);
+	}
 	else
-		vec.insert(vec.begin(), element);
+	{
+		std::cout << "4\n";
+		vec.insert(vec.begin() +  start, element);
+	}
 }
 
-// void BUpdateVec(std::vector<int>& vec, int element, int position)
-// {
-	
-// }
+void insertBOneToAVec (const std::vector<int> bSec, 
+	std::vector<int>& aSec)
+{
+	aSec.insert(aSec.begin(), bSec[0]);
+}

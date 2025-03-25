@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:39 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/25 13:52:51 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/25 15:49:32 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,16 +45,28 @@ int main(int argc, char* argv[])
 	// if (numbers.size() % 2 != 0)
 	// 	groups.emplace_back(std::vector<int>{numbers.back()});
 	std::vector<PmergeMe::Group> sortedGroups = pMM.mergeGroups(groups);
+	// std::cout << "main print" << std::endl;
+
+	pMM.printRes(sortedGroups);
+	PmergeMe::Group g;
+	g.lms = {2, 14};
+	pMM.BFindAndUpdateVec(sortedGroups, 0, sortedGroups.size() - 1, g),
 	std::cout << "main print" << std::endl;
 	pMM.printRes(sortedGroups);
+	BFindAndUpdateVec(numbers, 0, numbers.size() - 1, 14);
+	pMM.printRes(numbers);
+	std::cout << std::endl;
 	std::cout << "Before: ";
 	pMM.printRes(numbers);
+	std::cout << std::endl;
 	std::cout << "After:  ";
 	pMM.printRes(pMM.fastSort(numbers));
+	std::cout << std::endl;
 
-	std::cout << "//==========\n";
-	BFindAndUpdateVec(numbers, 0, numbers.size() - 1, 9);
-	pMM.printRes(numbers);
-	std::cout << "\n//==========\n";
+	// std::cout << "//==========\n";
+	// BFindAndUpdateVec(numbers, 0, numbers.size() - 1, 9);
+	// pMM.printRes(numbers);
+	// std::cout << "\n//==========\n";
+	// by taking two vectors to take the first element and insert it to the second one
 	return 0;
 }

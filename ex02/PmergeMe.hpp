@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:54 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/25 13:50:11 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/25 14:40:02 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ class PmergeMe
 		struct Group
 		{
 			size_t level = 0;
-			std::vector<int> elements;
-			int representator;
+			std::vector<int> lms;
+			int repr;
 
 			Group();
 			Group(const std::vector<int> elems);
@@ -55,9 +55,15 @@ class PmergeMe
 		// merge functions
 		// a function that run into a vec of group
 		std::vector<Group> mergeGroups(std::vector<Group> groups);
+		void BFindAndUpdateVec(std::vector<Group>& vec, 
+			int start, int end, Group element);
+		void insertBOneToAVec (const std::vector<Group> bSec, 
+				std::vector<Group>& aSec);
 	};
 	int	spPow(int n1, int n2);
 	int jSeq(int n);
 	void BFindAndUpdateVec(std::vector<int>& vec, 
 		int start, int end, int element);
-	// void BUpdateVec(std::vector<int>& vec, int element, int position);
+	void insertBOneToAVec (const std::vector<int> bSec, 
+		std::vector<int>& aSec);
+	// the given vector datatype
