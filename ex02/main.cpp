@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:39 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/25 17:07:29 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/25 17:25:51 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
 	pMM.BinarySortOne(sortedGroups, 0, sortedGroups.size() - 1, g),
 	std::cout << "main print" << std::endl;
 	pMM.printRes(sortedGroups);
-	// pMM.SplitTheMergedOneLevel(sortedGroups);
+	pMM.SplitTheMergedOneLevel(sortedGroups);
 	pMM.printRes(sortedGroups);
 	BinarySortOne(numbers, 0, numbers.size() - 1, 14);
 	pMM.printRes(numbers);

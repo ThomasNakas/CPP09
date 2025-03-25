@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:47 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/25 17:02:00 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/25 17:25:37 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,20 +184,25 @@ void PmergeMe::SplitTheMergedOneLevel(std::vector<PmergeMe::Group>& groups)
 		{
 			Group first;
 			Group second;
-			for (size_t j = 0; j != groups[j].lms.size(); j++)
+			for (size_t j = 0; j != groups[i].lms.size(); j++)
 			{
-				if(j >= groups[i].lms.size() / 2 - 1)
+				if(j <= groups[i].lms.size() / 2 - 1)
 				{
-					first.lms.push_back(groups[i].lms[i]);
+					std::cout << "5\n";
+					first.lms.push_back(groups[i].lms[j]);
+					printRes(first.lms);
 					continue;
 				}
-				second.lms.push_back(groups[i].lms[i]);
+				std::cout << "6\n";
+				second.lms.push_back(groups[i].lms[j]);
 			}
+			std::cout << "7\n";
 			groups.erase(groups.begin() + i);
 			groups.insert(groups.begin() + i, second);
 			groups.insert(groups.begin() + i, first);
 		}
 	}
+	std::cout << "1\n";
 	this->l--;
 }
 //=======Outside Functions======================
