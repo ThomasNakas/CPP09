@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:54 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/25 10:57:08 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/25 13:50:11 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,19 @@ class PmergeMe
 		PmergeMe& operator=(const PmergeMe& other);
 		// helpers
 		std::vector<int> fastSort(const std::vector<int>);
-		int	spPow(int n1, int n2);
 		//argv checker
 		bool IsNbr(const std::string&);
 		bool IsPInt(const std::string& );
-
+		
 		// print a vector
 		void printRes(const std::vector<int>);
 		void printRes(const std::vector<Group>);
+		// merge functions
+		// a function that run into a vec of group
 		std::vector<Group> mergeGroups(std::vector<Group> groups);
-};
+	};
+	int	spPow(int n1, int n2);
+	int jSeq(int n);
+	void BFindAndUpdateVec(std::vector<int>& vec, 
+		int start, int end, int element);
+	// void BUpdateVec(std::vector<int>& vec, int element, int position);

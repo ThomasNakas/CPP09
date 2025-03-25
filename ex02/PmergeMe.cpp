@@ -6,13 +6,13 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:47 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/25 10:55:59 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/25 13:51:49 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "PmergeMe.hpp"
-
+//========PmergeMe Default Functions=========
 PmergeMe::PmergeMe()
 {
 
@@ -29,50 +29,7 @@ PmergeMe& PmergeMe::operator=(const PmergeMe& other)
 	(void)other;
 	return *this;
 };
-
-void PmergeMe::printRes(const std::vector<int> vec)
-{
-	for(int n : vec)
-		std::cout << n << " ";
-	std::cout << std::endl;
-}
-
-void PmergeMe::printRes(const std::vector<PmergeMe::Group> groups)
-{
-	for (Group gr : groups)
-	{
-		for
-	}
-}
-
-bool PmergeMe::IsNbr(const std::string& str)
-{
-	return !str.empty() && std::all_of(str.begin(), str.end(), ::isdigit);
-}
-
-bool PmergeMe::IsPInt(const std::string& str)
-{
-	return  (
-				std::stod(str) >= 0.0 
-				&& std::stod(str) <= 2147483647.0
-			);
-};
-
-std::vector<int> PmergeMe::fastSort(const std::vector<int> numbers)
-{
-	std::vector<int> temp = numbers;
-	for(size_t i = 0; i != temp.size() - 1; i++)
-		for (size_t j = i + 1; j != temp.size(); j++)
-			if (temp[i] > temp[j])
-				std::swap(temp[i], temp[j]);
-	return temp;
-}
-
-int	PmergeMe::spPow(int n1, int n2)
-{
-	return ((int)pow((long double)n1, (long double)n2));
-};
-
+//========Group Default Functions=============
 PmergeMe::Group::Group()
 {
 };
@@ -95,6 +52,50 @@ PmergeMe::Group& PmergeMe::Group::operator=(const PmergeMe::Group& other)
 	return *this;
 }
 PmergeMe::Group::~Group(){};
+//========Helper Functions====================
+void PmergeMe::printRes(const std::vector<int> vec)
+{
+	for(int n : vec)
+		std::cout << n << " ";
+	std::cout << std::endl;
+}
+
+void PmergeMe::printRes(const std::vector<PmergeMe::Group> groups)
+{
+	for (Group gr : groups)
+	{
+		std::cout << "[";
+		for (int n : gr.elements)
+			if (n != gr.elements[gr.elements.size()])
+				std::cout << n << " ";
+		std::cout << "]";
+	}
+	std::cout << std::endl;
+}
+
+//========Checker functions=====================
+bool PmergeMe::IsNbr(const std::string& str)
+{
+	return !str.empty() && std::all_of(str.begin(), str.end(), ::isdigit);
+}
+
+bool PmergeMe::IsPInt(const std::string& str)
+{
+	return  (
+				std::stod(str) >= 0.0 
+				&& std::stod(str) <= 2147483647.0
+			);
+};
+
+std::vector<int> PmergeMe::fastSort(const std::vector<int> numbers)
+{
+	std::vector<int> temp = numbers;
+	for(size_t i = 0; i != temp.size() - 1; i++)
+		for (size_t j = i + 1; j != temp.size(); j++)
+			if (temp[i] > temp[j])
+				std::swap(temp[i], temp[j]);
+	return temp;
+}
 
 std::vector<PmergeMe::Group> PmergeMe::mergeGroups(std::vector<PmergeMe::Group> groups)
 {
@@ -138,8 +139,50 @@ std::vector<PmergeMe::Group> PmergeMe::mergeGroups(std::vector<PmergeMe::Group> 
 	
 	return groups;
 }
-//the pow(2,level) are the elements
-//I need to have a group 
-// I ll go to the given group
-// groups i = 0
-// 
+//Helper functions outside of class
+int	spPow(int n1, int n2)
+{
+	return ((int)pow((long double)n1, (long double)n2));
+};
+int jSeq(int n)
+{
+	return ((spPow(2, n) - spPow(-1, n))/3);
+}
+
+void BFindAndUpdateVec(std::vector<int>& vec, 
+	int start, int end, int element)
+{
+	while ((end-start) + 1 > 2)
+	{
+		std::cout << "start, end :" << start << ", " << end << std::endl;
+		if (element > vec[(end - start) / 2 + start])
+			start = (end - start) / 2 + 1 + start;
+		else
+			end = (end - start) / 2 - 1 + start;
+		for (int i = start; i <= end; i++)
+			std::cout << i << " ";
+		std::cout << std::endl;
+		// BFindPos(vec, start, end, element);
+	}
+	// for (int i = start; i <= end; i++)
+	// 		std::cout << i << " ";
+	// std::cout << std::endl;
+	if (element >= vec[end])
+	{
+		if ((size_t)end == vec.size() -1)
+		{
+			vec.push_back(element);
+			return ;
+		}
+		vec.insert(vec.begin() + end + 1, element);
+	}
+	else if (element < vec[end] && element >= vec[start])
+		vec.insert(vec.begin() + end, element);
+	else
+		vec.insert(vec.begin(), element);
+}
+
+// void BUpdateVec(std::vector<int>& vec, int element, int position)
+// {
+	
+// }
