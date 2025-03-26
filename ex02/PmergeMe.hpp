@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:54 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/26 18:46:01 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/26 22:30:38 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,9 @@ class PmergeMe
 		{
 			std::vector<int> lms;
 			int repr;
-			int position = -4;
+			int position = -1;
 			int sequence = -1;
+			int size = -1;
 
 			Group();
 			Group(const std::vector<int> elems);

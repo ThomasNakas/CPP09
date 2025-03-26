@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:47 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/26 19:48:20 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/26 22:53:06 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ PmergeMe::Group::Group(const PmergeMe::Group& other)
 	this->repr = other.repr;
 	this->position = other.position;
 	this->sequence = other.sequence;
+	this->size = other.size;
 }
 PmergeMe::Group& PmergeMe::Group::operator=(const PmergeMe::Group& other)
 {
@@ -52,6 +53,7 @@ PmergeMe::Group& PmergeMe::Group::operator=(const PmergeMe::Group& other)
 		this->repr = other.repr;
 		this->position = other.position;
 		this->sequence = other.sequence;
+		this->size = other.size;
 	}
 	return *this;
 }
@@ -79,8 +81,10 @@ void PmergeMe::printRes(const std::vector<PmergeMe::Group> groups, int details)
 		std::cout << "[";
 		printRes(gr.lms);
 		if (details == YES)
-			std::cout << " | pos : "<< gr.position << " " << "seq: "<<  gr.sequence;
-		std::cout << "]";
+		{
+			std::cout << "|size:" << gr.size << "|"<< "repr:" << gr.repr <<  "|pos:"<< gr.position << "|" << "seq:"<<  gr.sequence;
+		}
+		std::cout << "]  ";
 	}
 	std::cout << "]";
 	std::cout << std::endl;
@@ -136,10 +140,8 @@ std::vector<PmergeMe::Group> PmergeMe::pairMergeSorting(std::vector<PmergeMe::Gr
 			if (tempGroup[i].repr > tempGroup[i + 1].repr && tempGroup[i].lms.size() == tempGroup[i + 1].lms.size())
 				std::swap(tempGroup[i], tempGroup[i + 1]);
 	groups = tempGroup;
-	// printRes(groups);
 	l++;
 	std::cout << "Level: "<< l << std::endl;
-	// std::cout << "the size: " << tempGroup.size() << std::endl;
 	}
 	
 	return groups;
@@ -149,23 +151,11 @@ void PmergeMe::BinarySortOne(std::vector<Group>& vec,
 	int start, int end, Group element)
 {
 	int middle = -1;
-	// std::cout << "start = 0" << "real : " << start << std::endl;
-	// std::cout << "end = 3" << "real : " << end << std::endl;
-	// printRes(vec, NO);
-	// printRes(element.lms);
-	// std::cout<<std::endl;
 	if (element.lms.size() -1 == vec[0].lms.size() -1)
 	{
 		while(end - start != 1)
 		{
-			// i++;
-			// if (i == 12)
-			// 	break;
-			// std::cout << "making the " << i <<std::endl;
 			middle = (end - start) /  2 + start;
-			// std::cout << "start : middle :  end ->" <<std::endl;
-			// std::cout << start << " : " << middle << " : "<< end << std::endl;
-			// std::cout << element.lms[element.lms.size() - 1] << ". . ."<< vec[middle].lms[vec[middle].lms.size() - 1]<<std::endl;
 			if (element.lms[element.lms.size() - 1] > vec[middle].lms[vec[middle].lms.size() - 1])
 				start = middle;
 			else
@@ -231,8 +221,6 @@ std::vector<std::vector<PmergeMe::Group>> PmergeMe::pairOfBAndA(std::vector<Pmer
 	int b_position = 1;
 	pair.push_back(a);
 	pair.push_back(b);
-	// std::cout << "Before in Pair Of B :" ;
-	// printRes(groups);
 	size_t NumberElemsWithSameSize = 0;
 	size_t i;
 	while (groups[NumberElemsWithSameSize].lms.size() == (size_t)spPow(2, l))
@@ -244,6 +232,8 @@ std::vector<std::vector<PmergeMe::Group>> PmergeMe::pairOfBAndA(std::vector<Pmer
 						std::swap(groups[j], groups[z]);
 	for (i = 0; i != groups.size(); i++)
 	{
+		groups[i].repr = groups[i].lms[groups[i].lms.size() -1];
+		groups[i].size = groups[i].lms.size();
 		if (groups[i].lms.size() == (size_t)spPow(2, l))
 		{
 			if ( i % 2 != 0)
@@ -269,13 +259,20 @@ std::vector<std::vector<PmergeMe::Group>> PmergeMe::pairOfBAndA(std::vector<Pmer
 };
 int PmergeMe::findIndexInPairFromPosition(std::vector<PmergeMe::Group> groups, int position)
 {
-	size_t i = 0;
-	for (Group gr : groups)
+	int find = NO;
+	while (find != YES)
 	{
-		i++;
-		if (gr.position == position)
-			return (int)i;
-		
+		size_t i = 0;
+		for (Group gr : groups)
+		{
+			i++;
+			if (gr.position == position)
+				return (int)i;
+		}
+		if (position > 0)
+			position--;
+		if (position == 0)
+			find = YES;
 	}
 	return -2;
 };
@@ -292,122 +289,55 @@ std::vector<int> PmergeMe::sortedVectorOfGroups(std::vector<PmergeMe::Group>& gr
 	printRes(mergedAndSorted, NO);
 	while(l != 0)
 	{
-		int n = 0;
-		// int n = 3;
-		// pairMergeSorting
-		// std::cout << "Step 1\n";
+		//- setting the step
+		int n = 3;
+		//jn and jn-1
+		int Jn;
+		int JnMinusOne;
 		SplitTheMergedOneLevel(mergedAndSorted);
-		printRes(mergedAndSorted, NO);
-		// pair a , b sequence
-		// std::cout << "Step 2\n";
 		pair = pairOfBAndA(mergedAndSorted);
-		// printRes(pair, NO);
-		// std::cout << "Step 3\n";
-		insertBOneToAVec(pair[B], pair[A]);
-		pair[B].erase(pair[B].begin());
-		printRes(pair, NO);
-		// I ll print the jabobsthal frequences
-		while (++n < 20)
+		// int maxPosA = pair[A].size();
+		int maxPosB = 0;
+		for (Group gr : pair[B])
+			if (gr.size == spPow(2, l))
+				maxPosB++;
+		Jn = Jacobsthal(n) < maxPosB ? Jacobsthal(n) : maxPosB;
+		std::cout << "here6\n";
+		JnMinusOne = Jacobsthal(n - 1);
+		std::cout << "here5\n";
+		while (pair[B].size() != 0 && pair[B][0].size ==spPow(2,l))
 		{
-			int reverse, prev;
-			reverse = spMin(Jacobsthal(n), (int)pair[B].size() - 1);
-			prev = spMin(Jacobsthal(n - 1), 0);
-			std::cout << std::endl;
-			std::cout << "from B: \n";
-			for (int i = reverse; i >= prev; i--)
+			insertBOneToAVec(pair[B], pair[A]);
+			pair[B].erase(pair[B].begin());
+			int indB;
+			indB = findIndexInPairFromPosition(pair[B], Jn);
+			std::cout << "here1 \n";
+			while(indB>=0)
 			{
-				// std::cout << pair[B][i].lms.size() << std::endl;
-				if ((int)pair[B][i].lms.size() == spPow(2, l))
-					printRes(pair[B][i].lms);
+				//Binary sorting
+				std::cout << "here2 \n";
+				BinarySortOne(pair[A],
+					findIndexInPairFromPosition(pair[A], JnMinusOne),
+					findIndexInPairFromPosition(pair[A], Jn) - 1, 
+					pair[B][indB]);
+				std::cout << "here3 \n";
+				pair[B].erase(pair[B].begin() + indB);
+				std::cout << "here4 \n";
+				indB--;
 			}
-			std::cout << std::endl;
 		}
-		std::cout <<std::endl;
-		while (pair[B].size() != 0)
+		while(pair[B].size() != 0 && pair[B][0].size !=spPow(2,n))
 		{
-			BinarySortOne(pair[A], 0, (int)pair[A].size(), pair[B][0]);
+			pair[A].push_back(pair[B][0]);
 			pair[B].erase(pair[B].begin());
 		}
+		groups = pair[A];
 	}
-	
-	res.push_back(0);
+	for (size_t i = 0; i != groups.size() - 1; i++)
+		res[i] = groups[i].lms[0];
+	printRes(groups, NO);
 	return res;
 }
-
-
-
-
-
-
-	
-		// int n = 3;
-		// int J;
-		// int maxBIndexSequence, maxAIndexSequence, notReady;
-		// std::vector<Group> a,b;
-		// SplitTheMergedOneLevel(groups);
-		// pair = pairOfBAndA(groups);
-		// a = pair[A];
-		// b = pair[B];
-		// notReady = 0;
-		// for (size_t i = 0; i !=pair[B].size(); i++)
-		// 	if (pair[B][i].lms.size() != (size_t)spPow(2, l))
-		// 		notReady++;
-		// maxBIndexSequence = pair[A].size() - notReady;
-		// maxAIndexSequence = pair[A].size();
-		// std::cout << "m" << "\n";
-		// insertBOneToAVec(pair[B], pair[A]);
-		// pair[B].erase(pair[B].begin() + 0);
-		// printRes(pair, NO);
-		// std::cout << "m" << "\n";
-		// J = Jacobsthal(n);
-		// while (pair[B].size() != 0 || b[0].position == -2)
-		// {
-		// 	size_t b_index;
-		// 	size_t a_index;
-		// 	b_index = J > maxBIndexSequence ? maxBIndexSequence : J;
-		// 	a_index = J > maxAIndexSequence ? maxAIndexSequence : J;
-		// 	// a jacoby routine j = 3 
-		// 	//===> index in the array b for position = 3 
-		// 	//==> if position 3 is not existing go to max position of b 
-		// 	//==> if max == -2 that means I'm ready to push at the end of a 
-		// 	//==> if max >= 0 find this position on the array a if is not existing find the max position and start binary
-		// 	//==>delete
-		// 	//b.size() != 0 || b[0].position == -2
-		// 	while (J > Jacobsthal(n - 1))
-		// 	{
-		// 		std::cout << "J"<<n<<": " << J <<std::endl;
-		// 		// I will go find the specific element from b by the given position take it
-		// 		// b_index = (J > maxBIndexSequence) ? (maxBIndexSequence):findIndexInPairFromPosition(pair[B], J);
-		// 		std::cout << "b_index: "<< b_index << std::endl;
-		// 		// a_index = (J > maxAIndexSequence) ? (maxAIndexSequence):findIndexInPairFromPosition(a, J);
-		// 		std::cout << "a_index: "<< a_index << std::endl;
-		// 		BinarySortOne(pair[A],Jacobsthal(n - 1), a_index - 1, pair[B][b_index]);
-		// 		pair[B].erase(pair[B].begin() + b_index);
-		// 		J--;
-		// 		maxBIndexSequence--;
-		// 		maxAIndexSequence--;
-		// 		printRes(pair, YES);
-		// 	}
-		// 	n++;
-		// 	J = Jacobsthal(n);
-	// 	}
-	// 	size_t i = -1;
-	// 	while (pair[B][++i].position != -2)
-	// 		break ;
-	// 	while (pair[B][i++].position == -2)
-	// 	pair[A].push_back(pair[B][i]);
-	// 	groups = pair[A];
-	// 	// printRes(pair[A], NO);
-	// }
-	// //b1 a1 a2 a3 a4
-	// //b2 b3 b4 b5
-	// for (size_t i = 0; i != groups.size(); i++)
-	// 	res.push_back(groups[i].lms[0]);
-	// printRes(res, NO);
-	// std::cout << std::endl;
-	// return res;
-// };
-
 //=======Outside Functions======================
 int	spPow(int n1, int n2)
 {
