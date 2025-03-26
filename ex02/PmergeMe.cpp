@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:47 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/26 18:16:15 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/26 18:28:43 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -289,6 +289,7 @@ std::vector<int> PmergeMe::sortedVectorOfGroups(std::vector<PmergeMe::Group>& gr
 	printRes(mergedAndSorted, NO);
 	while(l != 0)
 	{
+		int n = 0;
 		// int n = 3;
 		// pairMergeSorting
 		// std::cout << "Step 1\n";
@@ -302,6 +303,10 @@ std::vector<int> PmergeMe::sortedVectorOfGroups(std::vector<PmergeMe::Group>& gr
 		insertBOneToAVec(pair[B], pair[A]);
 		pair[B].erase(pair[B].begin());
 		printRes(pair, NO);
+		// I ll print the jabobsthal frequences
+		while (++n < 9)
+			std::cout <<Jacobsthal(n) << " ";
+		std::cout <<std::endl;
 		while (pair[B].size() != 0)
 		{
 			BinarySortOne(pair[A], 0, (int)pair[A].size(), pair[B][0]);
