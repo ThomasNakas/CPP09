@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:54 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/26 04:13:12 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/26 18:46:01 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ class PmergeMe
 	};
 	int	spPow(int n1, int n2);
 	int Jacobsthal(int n);
+	int spMin (int a, int b);
 	// I need a transition from int to sequence
 	// which sequence has insice the value the position
 	// in the sequence and the type of the sequence

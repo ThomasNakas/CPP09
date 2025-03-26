@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:47 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/26 18:28:43 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/26 18:52:21 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,9 +151,9 @@ void PmergeMe::BinarySortOne(std::vector<Group>& vec,
 	int middle = -1;
 	// std::cout << "start = 0" << "real : " << start << std::endl;
 	// std::cout << "end = 3" << "real : " << end << std::endl;
-	printRes(vec, NO);
-	printRes(element.lms);
-	std::cout<<std::endl;
+	// printRes(vec, NO);
+	// printRes(element.lms);
+	// std::cout<<std::endl;
 	if (element.lms.size() -1 == vec[0].lms.size() -1)
 	{
 		while(end - start != 1)
@@ -163,9 +163,9 @@ void PmergeMe::BinarySortOne(std::vector<Group>& vec,
 			// 	break;
 			// std::cout << "making the " << i <<std::endl;
 			middle = (end - start) /  2 + start;
-			std::cout << "start : middle :  end ->" <<std::endl;
-			std::cout << start << " : " << middle << " : "<< end << std::endl;
-			std::cout << element.lms[element.lms.size() - 1] << ". . ."<< vec[middle].lms[vec[middle].lms.size() - 1]<<std::endl;
+			// std::cout << "start : middle :  end ->" <<std::endl;
+			// std::cout << start << " : " << middle << " : "<< end << std::endl;
+			// std::cout << element.lms[element.lms.size() - 1] << ". . ."<< vec[middle].lms[vec[middle].lms.size() - 1]<<std::endl;
 			if (element.lms[element.lms.size() - 1] > vec[middle].lms[vec[middle].lms.size() - 1])
 				start = middle;
 			else
@@ -304,8 +304,18 @@ std::vector<int> PmergeMe::sortedVectorOfGroups(std::vector<PmergeMe::Group>& gr
 		pair[B].erase(pair[B].begin());
 		printRes(pair, NO);
 		// I ll print the jabobsthal frequences
-		while (++n < 9)
-			std::cout <<Jacobsthal(n) << " ";
+		while (++n < 20)
+		{
+			int reverse, prev;
+			reverse = spMin(Jacobsthal(n), (int)pair[B].size() - 1);
+			prev = spMin(Jacobsthal(n - 1), 0);
+			std::cout << std::endl;
+			std::cout << "from B: \n";
+			for (int i = reverse; i != prev; i--)
+				if ((int)pair[B][i].lms.size() == spPow(2, l))
+					printRes(pair[B][i].lms);
+			std::cout << std::endl;
+		}
 		std::cout <<std::endl;
 		while (pair[B].size() != 0)
 		{
@@ -400,4 +410,8 @@ int	spPow(int n1, int n2)
 int Jacobsthal(int n)
 {
 	return ((spPow(2, n) - spPow(-1, n))/3);
+}
+int spMin(int a, int b)
+{
+	return (a < b ? a : b);
 }
