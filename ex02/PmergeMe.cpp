@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:47 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/26 18:05:54 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/26 18:16:15 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -302,9 +302,10 @@ std::vector<int> PmergeMe::sortedVectorOfGroups(std::vector<PmergeMe::Group>& gr
 		insertBOneToAVec(pair[B], pair[A]);
 		pair[B].erase(pair[B].begin());
 		printRes(pair, NO);
-		for(size_t i = 0; i != pair[B].size(); i++)
+		while (pair[B].size() != 0)
 		{
-			BinarySortOne(pair[A], 0, (int)pair[A].size(), pair[B][i]);
+			BinarySortOne(pair[A], 0, (int)pair[A].size(), pair[B][0]);
+			pair[B].erase(pair[B].begin());
 		}
 	}
 	
