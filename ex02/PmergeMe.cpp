@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:47 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/26 18:52:21 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/26 19:48:20 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,24 +244,27 @@ std::vector<std::vector<PmergeMe::Group>> PmergeMe::pairOfBAndA(std::vector<Pmer
 						std::swap(groups[j], groups[z]);
 	for (i = 0; i != groups.size(); i++)
 	{
-		if (groups[i].lms.size() == (size_t)spPow(2, l) && i % 2 != 0)
-		{
-			groups[i].sequence = A;
-			groups[i].position = a_position++;
-			pair[A].push_back(groups[i]);
-			// std::cout << "con\n";
-			continue ;
-		}
-		// std::cout << "groups\n";
-		groups[i].sequence = B;
 		if (groups[i].lms.size() == (size_t)spPow(2, l))
-			groups[i].position = b_position++;
+		{
+			if ( i % 2 != 0)
+			{
+				groups[i].sequence = A;
+				groups[i].position = a_position++;
+				pair[A].push_back(groups[i]);
+			}
+			else
+			{
+				groups[i].sequence = B;
+				groups[i].position = b_position++;
+				pair[B].push_back(groups[i]);
+			}
+		}
 		else
+		{
 			groups[i].position = -2;
-		pair[B].push_back(groups[i]);
+			pair[B].push_back(groups[i]);
+		}
 	}
-	// std::cout << "After in Pair Of B :\n" ;
-	// printRes(pair);
 	return pair;
 };
 int PmergeMe::findIndexInPairFromPosition(std::vector<PmergeMe::Group> groups, int position)
@@ -311,9 +314,12 @@ std::vector<int> PmergeMe::sortedVectorOfGroups(std::vector<PmergeMe::Group>& gr
 			prev = spMin(Jacobsthal(n - 1), 0);
 			std::cout << std::endl;
 			std::cout << "from B: \n";
-			for (int i = reverse; i != prev; i--)
+			for (int i = reverse; i >= prev; i--)
+			{
+				// std::cout << pair[B][i].lms.size() << std::endl;
 				if ((int)pair[B][i].lms.size() == spPow(2, l))
 					printRes(pair[B][i].lms);
+			}
 			std::cout << std::endl;
 		}
 		std::cout <<std::endl;
