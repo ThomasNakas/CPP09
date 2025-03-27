@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:54 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/26 22:30:38 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/27 01:14:19 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,10 @@ class PmergeMe
 				std::vector<Group>& aSec);
 		void SplitTheMergedOneLevel(std::vector<Group>& groups);
 		std::vector<std::vector<PmergeMe::Group>> pairOfBAndA(std::vector<Group> gr);
-		int findIndexInPairFromPosition(std::vector<PmergeMe::Group> groups, int position);
 		std::vector<int> sortedVectorOfGroups(std::vector<Group>& groups);
+		// Helper into the logic
+		int findIndexInPairFromPosition(std::vector<PmergeMe::Group> groups, int position, int seq);
+		int findMaxIndex(std::vector<PmergeMe::Group> groups, int sqnc);
 	};
 	int	spPow(int n1, int n2);
 	int Jacobsthal(int n);
