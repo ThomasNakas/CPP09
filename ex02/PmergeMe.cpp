@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:47 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/27 04:49:55 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/27 18:13:35 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,8 @@ void PmergeMe::BinarySortOne(std::vector<Group>& vec,
 	int start, int end, Group element)
 {
 	int middle = -1;
+	std::cout << "here3000\n";
+	std::cout << "here85\n";
 	std::cout << "here85\n";
 	std::cout <<" "<< end << " "<< start<<std::endl;
 	std::cout << "here85\n";
@@ -162,13 +164,10 @@ void PmergeMe::BinarySortOne(std::vector<Group>& vec,
 		std::cout << "here85\n";
 		std::cout <<" "<< start << " "<< end <<std::endl;
 		std::cout << "here85\n";
-		int i = 0;
 		std::cout << "here1000\n";
+		int first_time = YES;
 		while(end - start > 1)
 		{
-			// if (i == 6)
-			//  	break;
-			i++;
 			middle = (end - start) /  2 + start;
 			std::cout << "here100\n";
 			std::cout << "start : " << start << " | middle : " << middle << " | end :" << end << std::endl;
@@ -188,6 +187,18 @@ void PmergeMe::BinarySortOne(std::vector<Group>& vec,
 			}
 			else
 			{
+				std::cout << "here for the first comparisson\n";
+				if (first_time == YES)
+				{
+					std::cout << "here1111\n";
+					first_time = NO;
+					start = 0;
+					if (readyToRemove == NO)
+						BinarySortOne(vec, start, end, element);
+					std::cout << "start udated to 0\n";
+					std::cout << "here1111\n";
+				}
+				std::cout << "here for the first comparisson\n";
 				std::cout << "start : " << start << " | middle : " << middle << " | end :" << end << std::endl;
 				std::cout << "here58\n";
 				end = middle;
@@ -199,12 +210,20 @@ void PmergeMe::BinarySortOne(std::vector<Group>& vec,
 			middle = start;
 			if (element.repr <= vec[middle].repr)
 			{
-				vec.insert(vec.begin() + middle, element);
+				if (first_time == YES)
+				{
+					std::cout << "here1111\n";
+					first_time = NO;
+					start = 0;
+					if (readyToRemove == NO)
+						BinarySortOne(vec, start, end, element);
+					std::cout << "start udated to 0\n";
+					std::cout << "here1111\n";
+				}
+				protectedInsert(vec, middle, element);
 			}
 			else if (element.repr > vec[middle].repr && element.repr <= vec[end].repr)
-			{
-				vec.insert(vec.begin() + middle + 1, element);
-			}
+				protectedInsert(vec, middle + 1, element);
 			else
 			{
 				std::cout << "here858\n";
@@ -214,13 +233,13 @@ void PmergeMe::BinarySortOne(std::vector<Group>& vec,
 					std::cout << "start : " << start << " | middle : " << middle << " | end :" << end << std::endl;
 					printRes(vec,YES);
 					printRes(element.lms);
-					vec.insert(vec.begin() + end + 1, element);
+					protectedInsert(vec, end + 1, element);
 					std::cout << "here758\n";
 				}
 				else
 				{
 					std::cout << "here658\n";
-					vec.push_back(element);
+					protectedPush(vec, element);
 					std::cout << "here658\n";
 				}
 				std::cout << "here858\n";
@@ -231,17 +250,17 @@ void PmergeMe::BinarySortOne(std::vector<Group>& vec,
 			middle = start;
 			if (element.repr <= vec[start].repr)
 			{
-				vec.insert(vec.begin() + start, element);
+				protectedInsert(vec, start, element);
 			}
 			else
 			{
 				if (end != (int)vec.size() - 1)
 				{
-					vec.insert(vec.begin() + start + 1, element);
+					protectedInsert(vec, start + 1, element);
 				}
 				else 
 				{
-					vec.push_back(element);
+					protectedPush(vec, element);
 				}
 			}
 				
@@ -254,6 +273,7 @@ void PmergeMe::BinarySortOne(std::vector<Group>& vec,
 			vec.push_back(element);
 		}
 	}
+	std::cout << "here3000\n";
 }
 
 void PmergeMe::insertBOneToAVec (std::vector<PmergeMe::Group> bSec, 
@@ -345,7 +365,7 @@ std::vector<int> PmergeMe::sortedVectorOfGroups(std::vector<PmergeMe::Group>& gr
 	std::vector<std::vector<Group>> pair;
 	std::vector<Group> mergedAndSorted;
 
-	// std::cout << "Before sorted vector: ";
+	std::cout << "Before sorted vector: ";
 	printRes(groups, NO);
 	std::cout << std::endl;
 	mergedAndSorted = pairMergeSorting(groups);
@@ -355,7 +375,7 @@ std::vector<int> PmergeMe::sortedVectorOfGroups(std::vector<PmergeMe::Group>& gr
 	while(l != 0)
 	{
 		
-		std::cout << "==>"<<  l << "here20\n";
+		std::cout << "==> level: "<<  l << "here20\n";
 		//- setting the step
 		int n = 3;
 		//jn and jn-1
@@ -396,7 +416,7 @@ std::vector<int> PmergeMe::sortedVectorOfGroups(std::vector<PmergeMe::Group>& gr
 			// in the vector A that is the end
 			indAEnd = findIndexInPairFromPosition(pair[A],pair[B][indB].position, A);
 			// the begining is the indA
-			indAStart = findIndexInPairFromPosition(pair[A], JnMinusOne, A);
+			indAStart = (findIndexInPairFromPosition(pair[A], JnMinusOne, A) == 1) && (indAEnd - 1== 1) ? 0 : findIndexInPairFromPosition(pair[A], JnMinusOne, A);
 			while(indB>=0)
 			{
 				//Binary sorting
@@ -415,7 +435,7 @@ std::vector<int> PmergeMe::sortedVectorOfGroups(std::vector<PmergeMe::Group>& gr
 				printRes(pair, YES);
 				std::cout << "here3 \n";
 				if (indAEnd)
-				pair[B].erase(pair[B].begin() + indB);
+				protectedErase(pair, indB);
 				std::cout << "here4 \n";
 				printRes(pair, NO);
 				std::cout << "here4 \n";
@@ -477,6 +497,27 @@ int PmergeMe::findMaxIndex(std::vector<PmergeMe::Group> groups, int sqnc)
 	return i;
 };
 
+void 	PmergeMe::protectedInsert(std::vector<PmergeMe::Group>& vec, int start, PmergeMe::Group element)
+{
+	if (readyToRemove == NO)
+	{
+		vec.insert(vec.begin() + start, element);
+		readyToRemove = YES;
+	}
+};
+void 	PmergeMe::protectedPush(std::vector<PmergeMe::Group>& vec, PmergeMe::Group element)
+{
+	if (readyToRemove == NO)
+	{
+		vec.push_back(element);
+		readyToRemove = YES;
+	}
+};
+void PmergeMe::protectedErase(std::vector<std::vector<PmergeMe::Group>>& pair, int index)
+{
+	pair[B].erase(pair[B].begin() + index);
+	readyToRemove = NO;
+};
 //=======Outside Functions======================
 int	spPow(int n1, int n2)
 {
@@ -490,3 +531,8 @@ int spMin(int a, int b)
 {
 	return (a < b ? a : b);
 }
+
+// if the Jn - 1
+// I don't know how small it is ! so in the first comparisson if the element is lower than the center
+// set the begin to zero 
+// is m not even getting inside

@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:54 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/27 01:14:19 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/27 18:07:19 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ class PmergeMe
 {
 	public:
 		size_t l = 0;
+		size_t lastInsPos = 0;
+		size_t readyToRemove = NO;
 		enum type{A,B};
 		enum print{YES, NO};
 		struct Group
@@ -73,6 +75,9 @@ class PmergeMe
 		// Helper into the logic
 		int findIndexInPairFromPosition(std::vector<PmergeMe::Group> groups, int position, int seq);
 		int findMaxIndex(std::vector<PmergeMe::Group> groups, int sqnc);
+		void protectedInsert(std::vector<Group>& vec, int start, Group element);
+		void protectedPush(std::vector<Group>& vec, Group element);
+		void protectedErase(std::vector<std::vector<Group>>&, int index);
 	};
 	int	spPow(int n1, int n2);
 	int Jacobsthal(int n);
