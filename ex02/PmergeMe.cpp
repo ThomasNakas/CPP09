@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:47 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/27 19:43:52 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/27 21:44:39 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,7 @@ void PmergeMe::printRes(const std::vector<int> vec)
 	for(int n : vec)
 	{
 		std::cout << n; 
-		if (n != vec[vec.size() -1])
-			std::cout << " ";
+		std::cout << " ";
 	}
 	std::cout << "]";
 }
@@ -373,15 +372,22 @@ std::vector<int> PmergeMe::sortedVectorOfGroups(std::vector<PmergeMe::Group>& gr
 	std::cout << "outside of loop" << std::endl;
 	while(l != 0)
 	{
-		
-		std::cout << "==> level: "<<  l << "here20\n";
+		std::cout << "while(l != 0)\n";
+		std::cout << "==> level: "<<  l <<"\n";
+		std::cout << "here20\n";
 		//- setting the step
 		int n = 3;
 		//jn and jn-1
 		int Jn;
 		int JnMinusOne;
+		std::cout << " Before SplitTheMergedOneLevel\n";
+		printRes(mergedAndSorted, NO);
 		SplitTheMergedOneLevel(mergedAndSorted);
+		std::cout << " After SplitTheMergedOneLevel\n";
+		printRes(mergedAndSorted, NO);
+		std::cout << " Before pairOfBAndA(mergedAndSorted)\n";
 		pair = pairOfBAndA(mergedAndSorted);
+		std::cout << " After pairOfBAndA(mergedAndSorted)\n";
 		// int maxPosA = pair[A].size();
 		int maxPosB = findMaxIndex(pair[B], B);
 		int maxPosA = findMaxIndex(pair[A], A);
@@ -457,24 +463,31 @@ std::vector<int> PmergeMe::sortedVectorOfGroups(std::vector<PmergeMe::Group>& gr
 		}
 		while(!pair[B].empty() && pair[B][0].size !=spPow(2,n))
 		{
+			std::cout << "inside while(!pair[B].empty() && pair[B][0].size !=spPow(2,n))\n after here9\n";
 			if (pair[B].empty()) break;
 			pair[A].push_back(pair[B][0]);
 			pair[B].erase(pair[B].begin());
 		}
-		groups = pair[A];
+		printRes(groups, NO);
+		mergedAndSorted = pair[A];
 		std::cout << "here20\n";
 		printRes(groups, NO);
+		printRes(pair[A], NO);
+		std::cout << "here20\n";
+		std::cout << "End Of big Loop\n";
 	}
+	std::cout << "Next line after l < 0\n";
 	std::cout << "here21\n";
-	printRes(groups, NO);
+	printRes(mergedAndSorted, NO);
 	std::cout << "here21\n";
-	for (size_t i = 0; i != groups.size() - 1; i++)
+	for (size_t i = 0; i != mergedAndSorted.size() - 1; i++)
 	{
 		std::cout << "here21\n";
-		if(!groups[i].lms.empty())
-			res.push_back((groups[i].lms[0]));
+		if(!mergedAndSorted[i].lms.empty())
+			res.push_back((mergedAndSorted[i].lms[0]));
+		printRes(mergedAndSorted, NO);
 	}
-	printRes(groups, NO);
+	printRes(mergedAndSorted, NO);
 	return res;
 }
 
