@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:54 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/28 00:02:41 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/28 06:07:09 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ class PmergeMe
 		void protectedInsert(std::vector<Group>& vec, int start, Group element);
 		void protectedPush(std::vector<Group>& vec, Group element);
 		void protectedErase(std::vector<std::vector<Group>>&, int index);
+		int	jacobsthalIsExisitng(std::vector<Group> gr, int jacobsthal);
 	};
 	int	spPow(int n1, int n2);
 	int Jacobsthal(int n);

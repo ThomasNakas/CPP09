@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:47 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/28 05:37:14 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/28 06:10:13 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,7 +206,7 @@ void PmergeMe::BinarySortOne(std::vector<Group>& vec,
 		int index = 2147483647;
 		for  (size_t i = 0; i != vec.size(); i++)
 				index = std::max(0, ((int)i <= index && vec[i].sequence == B) ? vec[i].repr : index);
-		lastInsPos = index;
+		lastInsPos = findIndexInPairFromPosition(vec, element.position, B);
 	}		
 	else
 	{
@@ -339,6 +339,7 @@ std::vector<int> PmergeMe::sortedVectorOfGroups(std::vector<PmergeMe::Group>& gr
 		JnMinusOne = Jacobsthal(n - 1) < 0 ? 0 : Jacobsthal(n - 1);
 		insertBOneToAVec(pair[B], pair[A]);
 		pair[B].erase(pair[B].begin());
+		lastInsPos = 0;
 		printRes(pair, NO);
 		while (!pair[B].empty() && pair[B][0].size ==spPow(2,l))
 		{
@@ -348,16 +349,16 @@ std::vector<int> PmergeMe::sortedVectorOfGroups(std::vector<PmergeMe::Group>& gr
 			indB = findIndexInPairFromPosition(pair[B], Jn, B);
 			//which is the pos of indB
 			indAEnd = findIndexInPairFromPosition(pair[A],std::min (Jn, findMaxPos(pair[B], B)), A);
-			indAStart = std::min (lastInsPos, findIndexInPairFromPosition(pair[A],std::max(0, JnMinusOne),A)); 
+			indAStart = std::min (lastInsPos, (jacobsthalIsExisitng(pair[A], JnMinusOne) == YES) ? JnMinusOne : 0); 
 			int i = 0;
 			while(indB>=0)
 			{
 				maxPosA = findMaxPos(pair[A], A);
 				maxPosB = findMaxPos(pair[B],B);
-				maxIndexOfPosB = findMaxIndex(pair[B], B, maxPosB);
-				maxIndexOfPosA = findMaxIndex(pair[A], A, maxPosA);
+				maxIndexOfPosB = findMaxIndex(pair[B], B, std::min(JnMinusOne, maxPosB));
+				maxIndexOfPosA = findMaxIndex(pair[A], A, std::min(Jn - i,maxPosA));
 				BinarySortOne(pair[A],
-					indAStart,
+					std::min(indAStart - i, std::max(0 ,lastInsPos)),
 					(maxPosB > maxPosA ? indAEnd : indAEnd - 1), 
 					pair[B][indB]);
 				printRes(pair, NO);
@@ -445,6 +446,13 @@ void PmergeMe::protectedErase(std::vector<std::vector<PmergeMe::Group>>& pair, i
 	pair[B].erase(pair[B].begin() + index);
 	readyToRemove = NO;
 };
+int	PmergeMe::jacobsthalIsExisitng(std::vector<PmergeMe::Group> gr, int jacobsthal)
+{
+	for (size_t i = 0; i != gr.size(); i++)
+		if (gr[i].repr == jacobsthal)
+			return YES;
+	return NO;
+}
 //=======Outside Functions======================
 int	spPow(int n1, int n2)
 {
