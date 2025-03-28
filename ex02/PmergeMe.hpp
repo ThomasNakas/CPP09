@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:54 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/27 19:30:49 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/28 00:02:41 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@
 class PmergeMe
 {
 	public:
-		size_t l = 0;
-		size_t lastInsPos = 0;
+		int l = 0;
+		int lastInsPos = -1;
 		size_t readyToRemove = NO;
 		enum type{A,B};
 		enum print{YES, NO};
@@ -74,7 +74,8 @@ class PmergeMe
 		std::vector<int> sortedVectorOfGroups(std::vector<Group>& groups);
 		// Helper into the logic
 		int findIndexInPairFromPosition(std::vector<PmergeMe::Group> groups, int position, int seq);
-		int findMaxIndex(std::vector<PmergeMe::Group> groups, int sqnc);
+		int findMaxIndex(std::vector<PmergeMe::Group> groups, int sqnc, int mx);
+		int findMaxPos(std::vector<Group> groups, int sqnc);
 		void protectedInsert(std::vector<Group>& vec, int start, Group element);
 		void protectedPush(std::vector<Group>& vec, Group element);
 		void protectedErase(std::vector<std::vector<Group>>&, int index);

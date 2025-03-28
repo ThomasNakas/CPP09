@@ -6,7 +6,7 @@
 #    By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/21 16:08:16 by tnakas            #+#    #+#              #
-#    Updated: 2025/03/23 18:43:52 by tnakas           ###   ########.fr        #
+#    Updated: 2025/03/28 02:12:51 by tnakas           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ OBJ_DIR     = obj
 SRC         = $(SRC_DIR)/main.cpp $(SRC_DIR)/PmergeMe.cpp
 OBJ         = $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
-CC          = c++
+CC          = c++ -g
 RM          = rm -rf
 STD         = c++17
 CPPFLAGS    = -Wall -Wextra -Werror -std=$(STD)
