@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:47 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/30 01:43:30 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/30 03:45:21 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,23 @@ std::vector<int> PmergeMe::fastSort(const std::vector<int> numbers)
 	return temp;
 }
 
+//==Prinmary functions for vector and deque===
+void PmergeMe::primaryVec(std::vector<int>& res, std::vector<int>& numbers, std::vector<PmergeMe::Group>& groups, char* argv[], int argc)
+{
+		for (int i = 1; i < argc; i++)
+		numbers.push_back(std::stoi(argv[i]));
+	if (numbers.size() == 3)
+		for (size_t i = 0; i + 1 != numbers.size(); i++)
+			for (size_t j = i; j != numbers.size(); j++)
+				if (numbers[i] > numbers[j])
+					std::swap(numbers[i], numbers[j]);
+	for (size_t i =0; i + 1 < numbers.size(); i+=2)
+		if (numbers[i] > numbers[i + 1])
+			std::swap(numbers[i], numbers[i + 1]);
+	for (size_t i = 0; i < numbers.size(); i++)
+		groups.emplace_back(std::vector<int>{numbers[i]});
+	res = sortedVectorOfGroups(groups);
+};
 //========Helper Functions====================
 void PmergeMe::printRes(const std::vector<int> vec)
 {
@@ -105,8 +122,8 @@ int PmergeMe::SortingLessThanThree(std::vector<PmergeMe::Group>& vec)
 				nOfGroupsOnTheSameLevel++;
 		if (nOfGroupsOnTheSameLevel <= 3)
 		{
-			for (size_t i = 0; i + 1!=vec.size(); i++)
-				for  (size_t j = i + 1; j != vec.size(); j++)
+			for (size_t i = 0; i + 1!=nOfGroupsOnTheSameLevel; i++)
+				for  (size_t j = i + 1; j != nOfGroupsOnTheSameLevel; j++)
 					if (vec[i].repr > vec[j].repr)
 						std::swap(vec[i], vec[j]);
 			return YES;
@@ -133,8 +150,8 @@ std::vector<PmergeMe::Group> PmergeMe::pairMergeSorting(std::vector<PmergeMe::Gr
 		{
 			if (tempGroup[i].repr > tempGroup[i + 1].repr && tempGroup[i].lms.size() == tempGroup[i + 1].lms.size())
 				std::swap(tempGroup[i], tempGroup[i + 1]);
-			if (tempGroup[i].lms.size() != tempGroup[i+1].lms.size())
-				break;
+			// if (tempGroup[i].lms.size() != tempGroup[i+1].lms.size())
+			// 	break;
 		}
 		l++;
 		SortingLessThanThree(tempGroup);
@@ -199,7 +216,6 @@ std::vector<PmergeMe::Group>& aSec)
 void PmergeMe::SplitTheMergedOneLevel(std::vector<PmergeMe::Group>& groups)
 {
 	std::vector<Group> newG;
-	std::cout << "before in the SplitBOne :";
 	for (size_t i = 0; i != groups.size() ; i++)
 	{
 		if(groups[i].lms.size() <= (size_t)spPow(2, l) && groups[i].lms.size() >  (size_t)spPow(2, l - 1))
@@ -285,7 +301,7 @@ std::vector<int> PmergeMe::sortedVectorOfGroups(std::vector<PmergeMe::Group>& gr
 		//  split the merged by one
 		SplitTheMergedOneLevel(mergedAndSorted);
 		//sorting three and If it's true I skip
-		if(SortingLessThanThree(mergedAndSorted) == YES) continue;
+		// if(SortingLessThanThree(mergedAndSorted) == YES) continue;
 		// making two pairs
 		pair = pairOfBAndA(mergedAndSorted);
 		//Inserting the b1 to the the A sequence
@@ -335,7 +351,7 @@ std::vector<int> PmergeMe::sortedVectorOfGroups(std::vector<PmergeMe::Group>& gr
 		}
 		mergedAndSorted = pair[A];
 	}
-	for (size_t i = 0; i != mergedAndSorted.size() - 1; i++)
+	for (size_t i = 0; i != mergedAndSorted.size(); i++)
 		if(!mergedAndSorted[i].lms.empty())
 			res.push_back((mergedAndSorted[i].lms[0]));
 	return res;

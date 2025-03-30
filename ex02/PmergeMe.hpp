@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:54 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/30 01:57:05 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/30 03:00:39 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ class PmergeMe
 		PmergeMe(const PmergeMe& other);
 		PmergeMe& operator=(const PmergeMe& other);
 		// the primary functions
-		void primaryVec(std::vector<int>& res, std::vector<int>& numbers, std::vector<Group>& groups);
+		void primaryVec(std::vector<int>& res, std::vector<int>& numbers, std::vector<Group>& groups, char* argv[], int argc);
 		// helpers
 		std::vector<int> fastSort(const std::vector<int>);
 		//argv checker
