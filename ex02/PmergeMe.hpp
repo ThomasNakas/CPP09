@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:54 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/28 06:07:09 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/30 01:57:05 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ class PmergeMe
 		int l = 0;
 		int lastInsPos = -1;
 		size_t readyToRemove = NO;
+		int minIns = 2147483647;
 		enum type{A,B};
 		enum print{YES, NO};
 		struct Group
@@ -51,7 +52,8 @@ class PmergeMe
 		~PmergeMe();
 		PmergeMe(const PmergeMe& other);
 		PmergeMe& operator=(const PmergeMe& other);
-		
+		// the primary functions
+		void primaryVec(std::vector<int>& res, std::vector<int>& numbers, std::vector<Group>& groups);
 		// helpers
 		std::vector<int> fastSort(const std::vector<int>);
 		//argv checker
@@ -64,6 +66,7 @@ class PmergeMe
 		void printRes(const std::vector<std::vector<Group>>, int details);
 		// merge functions
 		// a function that run into a vec of group
+		int SortingLessThanThree (std::vector<Group>& vec);
 		std::vector<Group> pairMergeSorting(std::vector<Group> groups);
 		void BinarySortOne(std::vector<Group>& vec, 
 			int start, int end, Group element);

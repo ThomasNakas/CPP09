@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:39 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/26 15:14:29 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/30 01:50:33 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,11 @@ int main(int argc, char* argv[])
 		if (!pMM.IsNbr(argv[i]) || !pMM.IsPInt(argv[i]))
 		{
 			std::cerr 
-			<< "Error: arguments needs to be possitive or equal with zero integers\n";
+			<< "Error: arguments needs to be possitive (or equal with zero) integers\n";
 			return 1;
 		}
 	}
-	//make the argv a vector
-	//----- form argv[1] until argc - 1
+	//vector implementation
 	for (int i = 1; i < argc; i++)
 		numbers.push_back(std::stoi(argv[i]));
 	if (numbers.size() == 3)
@@ -46,49 +45,13 @@ int main(int argc, char* argv[])
 			for (size_t j = i; j != numbers.size(); j++)
 				if (numbers[i] > numbers[j])
 					std::swap(numbers[i], numbers[j]);
-	//-----
 	for (size_t i =0; i + 1 < numbers.size(); i+=2)
 		if (numbers[i] > numbers[i + 1])
 			std::swap(numbers[i], numbers[i + 1]);
 	for (size_t i = 0; i < numbers.size(); i++)
 		groups.emplace_back(std::vector<int>{numbers[i]});
-	std::cout << "size of primary network: " << numbers.size() << std::endl;
-	// std::vector<PmergeMe::Group> sortedGroups = pMM.pairMergeSorting(groups);
-	std::cout << "main print" << std::endl;
-	pMM.printRes(groups, pMM.NO);
-	std::cout << "size of primary network: " << groups.size() << std::endl;
-	std::cout << "main print" << std::endl;
-	// res = pMM.sortedVectorOfGroups(sortedGroups);
-	// PmergeMe::Group g;
-	// g.lms = {2, 14};
-	// pMM.BinarySortOne(sortedGroups, 0, sortedGroups.size() - 1, g),
-	// std::cout << "main print" << std::endl;
-	// pMM.printRes(sortedGroups, pMM.YES);
-	// std::cout << "level: "<< pMM.l << std::endl;
-	// pMM.SplitTheMergedOneLevel(sortedGroups);
-	// pMM.printRes(sortedGroups, pMM.YES);
-	// pair = pMM.pairOfBAndA(sortedGroups);
-	// pMM.printRes(pair, pMM.YES);
-	// pMM.insertBOneToAVec(pair[pMM.B], pair[pMM.A]);
-	// pMM.printRes(pair, pMM.YES);
 	res = pMM.sortedVectorOfGroups(groups);
-	// pair = pMM.pairOfBAndA(sortedGroups);
-	// pMM.printRes(pair);
-	// BinarySortOne(numbers, 0, numbers.size() - 1, 14);
-	// pMM.printRes(numbers);
-	// std::cout << std::endl;
-	// std::cout << "Before: ";
-	// pMM.printRes(numbers);
-	// std::cout << std::endl;
-	// std::cout << "After:  ";
-	// pMM.printRes(pMM.fastSort(res));
-	// std::cout << std::endl;
-
-	// std::cout << "//==========\n";
-	// BinarySortOne(numbers, 0, numbers.size() - 1, 9);
-	// pMM.printRes(numbers);
-	// std::cout << "\n//==========\n";
-	// by taking two vectors to take the first element and insert it to the second one
+	//deque implementation
 	return 0;
 }
 
