@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:54 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/30 05:42:25 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/30 16:07:03 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,14 @@ class PmergeMe
 			std::vector<int> lms;
 			std::deque<int> lmsD;
 			int repr;
-			int position = -1;
-			int sequence = -1;
-			int size = -1;
+			int size;
+			int position;
+			int sequence;
 
 			Group();
-			Group(const std::vector<int> elems);
-			Group(const std::deque<int> elemsD);
+			//-------template alternative------
+			Group(const std::vector<int>& elems);
+			Group(const std::deque<int>& elemsD);
 			Group(const Group& other);
 			Group& operator=(const Group& other);
 			~Group();

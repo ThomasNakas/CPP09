@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:39 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/30 05:46:17 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/30 17:28:48 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,20 @@ int main(int argc, char* argv[])
 	std::cout << "Before Vector:\n";
 	pMM.printRes(res);
 	std::cout << "\n";
+	auto startVec = std::chrono::high_resolution_clock::now();
 	res = pMM.primaryVec(argv, argc);
+	auto endVec = std::chrono::high_resolution_clock::now();
+	auto durationVec = std::chrono::duration_cast<std::chrono::microseconds>(endVec - startVec); //I need to add a count at the end when I'm printing
 	std::cout << "After Vector:\n";
 	pMM.printRes(res);
 	std::cout << "\n";
 	std::cout << "Before Deque:\n";
 	pMM.printRes(resD);
 	std::cout << "\n";
+	auto startDeque = std::chrono::high_resolution_clock::now();
 	resD = pMM.primaryDeq(argv, argc);
+	auto endDeque = std::chrono::high_resolution_clock::now();
+	auto durationDeque = std::chrono::duration_cast<std::chrono::microseconds>(endDeque - startDeque); // I need to use the count() at the end
 	std::cout << "After Deque:\n";
 	pMM.printRes(resD);
 	std::cout << "\n";

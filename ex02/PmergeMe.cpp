@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:47 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/30 05:42:49 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/30 17:05:24 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,28 @@ PmergeMe& PmergeMe::operator=(const PmergeMe& other)
 };
 //========Group Default Functions=============
 PmergeMe::Group::Group() : position(0), sequence(0){};
-PmergeMe::Group::Group(std::vector<int> lms) : lms(lms), repr(lms.back()){};
-PmergeMe::Group::Group(std::deque<int> lmsD) : lmsD(lmsD), repr(lmsD.back()){};
+PmergeMe::Group::Group(const std::vector<int>& lms) :
+	lms(lms), 
+	lmsD(),
+	repr(lms.empty() ? -1 : lms.back()),
+	size(lms.empty() ? -1 : lms.size()),
+	position(-1),
+	sequence(-1)
+	{};
+PmergeMe::Group::Group(const std::deque<int>& lmsD) : 
+	lms(),
+	lmsD(lmsD), 
+	repr(lmsD.empty() ? -1 : lmsD.back()),
+	size(lmsD.empty() ? -1 : lmsD.size()),
+	position(-1),
+	sequence(-1)
+	{
+		std::cout << std::endl;
+		for (size_t i = 0; i != lmsD.size(); i++)
+			std::cout << "numbersD.at("<< i<<") = " << lmsD.at(i)  << std::endl;
+		std::cout << std::endl;
+		std::cout << "Deque Constructor called!\n";
+	};
 
 PmergeMe::Group::Group(const PmergeMe::Group& other)
 {
@@ -101,10 +121,13 @@ std::vector<int> PmergeMe::primaryVec(char* argv[], int argc)
 	for (int i = 1; i < argc; i++)
 		numbers.push_back(std::stoi(argv[i]));
 	if (numbers.size() == 3)
+	{
 		for (size_t i = 0; i + 1 != numbers.size(); i++)
 			for (size_t j = i; j != numbers.size(); j++)
 				if (numbers[i] > numbers[j])
 					std::swap(numbers[i], numbers[j]);
+		return numbers;
+	}
 	for (size_t i =0; i + 1 < numbers.size(); i+=2)
 		if (numbers[i] > numbers[i + 1])
 			std::swap(numbers[i], numbers[i + 1]);
@@ -121,15 +144,21 @@ std::deque<int> PmergeMe::primaryDeq(char* argv[], int argc)
 	for (int i = 1; i < argc; i++)
 		numbersD.push_back(std::stoi(argv[i]));
 	if (numbersD.size() == 3)
-		for (size_t i = 0; i + 1 != numbersD.size(); i++)
+	{
+		for (size_t i = 0; i != numbersD.size() - 1; i++)
 			for (size_t j = i; j != numbersD.size(); j++)
 				if (numbersD[i] > numbersD[j])
 					std::swap(numbersD[i], numbersD[j]);
+		return (numbersD);
+	}
 	for (size_t i =0; i + 1 < numbersD.size(); i+=2)
 		if (numbersD[i] > numbersD[i + 1])
 			std::swap(numbersD[i], numbersD[i + 1]);
 	for (size_t i = 0; i < numbersD.size(); i++)
-		groupsD.emplace_back(std::vector<int>{numbersD[i]});
+	{
+		std::cout << "numbersD.at("<< i<<") = " << numbersD.at(i)  << std::endl;
+		groupsD.push_back(std::deque<int>{numbersD.at(i)});
+	}
 
 	l = 0; lastInsPos = -1; minIns = 2147483647;
 	resD = sortedDequeOfGroups(groupsD);
@@ -235,7 +264,7 @@ int PmergeMe::SortingLessThanThree(std::deque<PmergeMe::Group>& dq)
 				nOfGroupsOnTheSameLevel++;
 		if (nOfGroupsOnTheSameLevel <= 3)
 		{
-			for (size_t i = 0; i + 1!=nOfGroupsOnTheSameLevel; i++)
+			for (size_t i = 0; i !=nOfGroupsOnTheSameLevel - 1; i++)
 				for  (size_t j = i + 1; j != nOfGroupsOnTheSameLevel; j++)
 					if (dq[i].repr > dq[j].repr)
 						std::swap(dq[i], dq[j]);
@@ -293,6 +322,7 @@ std::deque<PmergeMe::Group> PmergeMe::pairMergeSorting(std::deque<PmergeMe::Grou
 			if (tempGroup[i].repr > tempGroup[i + 1].repr && tempGroup[i].lmsD.size() == tempGroup[i + 1].lmsD.size())
 				std::swap(tempGroup[i], tempGroup[i + 1]);
 		}
+		printRes(tempGroup, YES);
 		l++;
 		SortingLessThanThree(tempGroup);
 		groups = tempGroup;
