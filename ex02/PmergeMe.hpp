@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:54 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/30 16:07:03 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/30 19:13:18 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,16 +63,18 @@ class PmergeMe
 		//=======the primary functions==============================================================
 		std::vector<int> primaryVec(char* argv[], int argc);
 		std::deque<int> primaryDeq(char* argv[], int argc);
+		//=======print the messages=================================================================
+		void printBeforeAndAfter(char* argv[], int argc);
+		void printVectorTime(char* argv[], int argc);
+		void printDequeTime(char* argv[], int argc);
 		//=======trial helpers======================================================================
 		std::vector<int> fastSort(const std::vector<int>);
 		std::deque<int> fastSort(const std::deque<int>);
 		
 		//=======print a vector=====================================================================
-		void printRes(const std::vector<int>);
 		void printRes(const std::vector<Group>, int details);
 		void printRes(const std::vector<std::vector<Group>>, int details);
-		//=======print a deque
-		void printRes(const std::deque<int> dq);
+		//=======print a deque======================================================================
 		void printRes(const std::deque<Group>, int details);
 		void printRes(const std::deque<std::deque<Group>>, int details);
 		//=======Soritng less than three============================================================
@@ -131,6 +133,22 @@ class PmergeMe
 	int	spPow(int n1, int n2);
 	int Jacobsthal(int n);
 	int spMin (int a, int b);
+	// for all data type vectors
+	template <typename T>
+	std::ostream& operator<<(std::ostream& os, std::vector<T>& vec)
+	{
+		for (size_t i = 0; i != vec.size(); i++)
+			os << vec[i] << " ";
+		return os;
+	};
+	// for all data type deques
+	template <typename T>
+	std::ostream& operator<<(std::ostream& os, std::deque<T>& dq)
+	{
+		for (size_t i = 0; i != dq.size(); i++)
+			os << dq[i] << " ";
+		return os;
+	};
 	// I need a transition from int to sequence
 	// which sequence has insice the value the position
 	// in the sequence and the type of the sequence

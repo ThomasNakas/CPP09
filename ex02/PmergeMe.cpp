@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:47 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/30 17:05:24 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/30 19:21:44 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,7 @@ PmergeMe::Group::Group(const std::deque<int>& lmsD) :
 	size(lmsD.empty() ? -1 : lmsD.size()),
 	position(-1),
 	sequence(-1)
-	{
-		std::cout << std::endl;
-		for (size_t i = 0; i != lmsD.size(); i++)
-			std::cout << "numbersD.at("<< i<<") = " << lmsD.at(i)  << std::endl;
-		std::cout << std::endl;
-		std::cout << "Deque Constructor called!\n";
-	};
+	{};
 
 PmergeMe::Group::Group(const PmergeMe::Group& other)
 {
@@ -136,6 +130,7 @@ std::vector<int> PmergeMe::primaryVec(char* argv[], int argc)
 	res = sortedVectorOfGroups(groups);
 	return res;
 };
+//----->deques<--------
 std::deque<int> PmergeMe::primaryDeq(char* argv[], int argc)
 {
 	std::deque<PmergeMe::Group> groupsD;
@@ -155,39 +150,58 @@ std::deque<int> PmergeMe::primaryDeq(char* argv[], int argc)
 		if (numbersD[i] > numbersD[i + 1])
 			std::swap(numbersD[i], numbersD[i + 1]);
 	for (size_t i = 0; i < numbersD.size(); i++)
-	{
-		std::cout << "numbersD.at("<< i<<") = " << numbersD.at(i)  << std::endl;
-		groupsD.push_back(std::deque<int>{numbersD.at(i)});
-	}
-
+		groupsD.push_back(std::deque<int>{numbersD[i]});
 	l = 0; lastInsPos = -1; minIns = 2147483647;
 	resD = sortedDequeOfGroups(groupsD);
 	return resD;
 };
-//----->deques<--------
-//========Helper Functions======================
-//----->vectors<-------
-void PmergeMe::printRes(const std::vector<int> vec)
+//========Debugging Functions===================
+//========Print The Messages Functions==========
+void PmergeMe::printBeforeAndAfter(char* argv[], int argc)
 {
-	std::cout << "[";
-	for(int n : vec)
-	{
-		std::cout << n; 
-		std::cout << " ";
-	}
-	std::cout << "]";
-}
-
+	std::cout << "Before: ";
+	for (int i = 1; i != argc; i++)
+		std::cout << argv[i]<< " ";
+	std::cout << "\n";
+	std::cout << "After:  ";
+	std::vector<int> pr;
+	for (int i = 1; i != argc; i++)
+		pr.push_back(std::stoi(argv[i]));
+	std::vector<int> pr2 = fastSort(pr);
+	std::cout << pr2;
+	std::cout << std::endl;
+};
+void PmergeMe::printVectorTime(char* argv[], int argc)
+{
+	std::vector<int> res;
+	auto startVec = std::chrono::high_resolution_clock::now();
+	res = primaryVec(argv, argc);
+	auto endVec = std::chrono::high_resolution_clock::now();
+	auto durationVec = std::chrono::duration_cast<std::chrono::nanoseconds>(endVec - startVec); //I need to add a count at the end when I'm printing
+	std::cout <<"Time to process a range of " << res.size() << " elements with std::vector["
+				<< res << "] : " << std::fixed << durationVec.count() / 1000.0 << " us" << std::endl;
+};
+void PmergeMe::printDequeTime(char* argv[], int argc)
+{
+	std::deque<int> resD;
+	auto startDeque = std::chrono::high_resolution_clock::now();
+	resD = primaryDeq(argv, argc);
+	auto endDeque = std::chrono::high_resolution_clock::now();
+	auto durationDeque = std::chrono::duration_cast<std::chrono::microseconds>(endDeque - startDeque); // I need to use the count() at the end
+	std::cout <<"Time to process a range of " << resD.size() << " elements with std::deque ["
+				<< resD << "] : " << std::fixed << durationDeque.count() / 1000.0 << " us" << std::endl;
+};
+//========Debugging Functions===================
+//----->vectors<-------
 void PmergeMe::printRes(const std::vector<PmergeMe::Group> groups, int details)
 {
 	std::cout << "[";
 	for (Group gr : groups)
 	{
-		std::cout << "[";
-		printRes(gr.lms);
+		std::cout << "[" << gr.lms;
 		if (details == YES)
-		std::cout << "|size:" << gr.size << "|"<< "repr:" << gr.repr <<  "|pos:"<< gr.position << "|" << "seq:"<<  gr.sequence;
-		std::cout << "]  ";
+			std::cout << "|size:" << gr.size << "|"<< "repr:" << gr.repr <<  "|pos:"<< gr.position << "|" << "seq:"<<  gr.sequence;
+			std::cout << "]  ";
 	}
 	std::cout << "]";
 	std::cout << std::endl;
@@ -201,24 +215,12 @@ void PmergeMe::printRes(const std::vector<std::vector<PmergeMe::Group>> pair , i
 	std::cout << std::endl;
 };
 //----->deques<--------
-void PmergeMe::printRes(const std::deque<int> dq)
-{
-	std::cout << "[";
-	for(int n : dq)
-	{
-		std::cout << n; 
-		std::cout << " ";
-	}
-	std::cout << "]";
-}
-
 void PmergeMe::printRes(const std::deque<PmergeMe::Group> groups, int details)
 {
 	std::cout << "[";
 	for (Group gr : groups)
 	{
-		std::cout << "[";
-		printRes(gr.lms);
+		std::cout << "[" << gr.lmsD;
 		if (details == YES)
 			std::cout << "|size:" << gr.size << "|"<< "repr:" << gr.repr <<  "|pos:"<< gr.position << "|" << "seq:"<<  gr.sequence;
 		std::cout << "]  ";
@@ -260,7 +262,7 @@ int PmergeMe::SortingLessThanThree(std::deque<PmergeMe::Group>& dq)
 {
 	size_t nOfGroupsOnTheSameLevel = 0;
 	for (Group& gr : dq)
-			if (gr.lms.size() == (size_t)spPow(2, l) && spPow(2,l) != 1)
+			if (gr.lmsD.size() == (size_t)spPow(2, l) && spPow(2,l) != 1)
 				nOfGroupsOnTheSameLevel++;
 		if (nOfGroupsOnTheSameLevel <= 3)
 		{
@@ -322,7 +324,6 @@ std::deque<PmergeMe::Group> PmergeMe::pairMergeSorting(std::deque<PmergeMe::Grou
 			if (tempGroup[i].repr > tempGroup[i + 1].repr && tempGroup[i].lmsD.size() == tempGroup[i + 1].lmsD.size())
 				std::swap(tempGroup[i], tempGroup[i + 1]);
 		}
-		printRes(tempGroup, YES);
 		l++;
 		SortingLessThanThree(tempGroup);
 		groups = tempGroup;
@@ -381,7 +382,7 @@ void PmergeMe::BinarySortOne(std::deque<Group>& dq,
 	int start, int end, Group element)
 {
 	int middle = -1;
-	if (!(element.lms.empty()) && (element.lms.size() == (size_t)spPow(2, l)))
+	if (!(element.lmsD.empty()) && (element.lmsD.size() == (size_t)spPow(2, l)))
 	{
 		while(end - start > 1)
 		{
@@ -418,7 +419,7 @@ void PmergeMe::BinarySortOne(std::deque<Group>& dq,
 			lastInsPos = findIndexInPairFromPosition(dq, element.position, B);
 	}		
 	else
-		if (!element.lms.empty())
+		if (!element.lmsD.empty())
 			dq.push_back(element);
 }
 //========Inserting b1 to A sequence============
@@ -499,10 +500,10 @@ void PmergeMe::SplitTheMergedOneLevel(std::deque<PmergeMe::Group>& groups)
 		
 		for (Group& gr : newG)
 		{
-			if(gr.lms.size() ==(size_t)spPow(2, l))
+			if(gr.lmsD.size() ==(size_t)spPow(2, l))
 			{
-				gr.size = gr.lms.size();
-				gr.repr = gr.lms[gr.size - 1];
+				gr.size = gr.lmsD.size();
+				gr.repr = gr.lmsD[gr.size - 1];
 			}
 		}
 	}
@@ -557,7 +558,7 @@ std::deque<std::deque<PmergeMe::Group>> PmergeMe::pairOfBAndA(std::deque<PmergeM
 	pair.push_back(b);
 	for (size_t i = 0; i != groups.size(); i++)
 	{
-		if (groups[i].lms.size() == (size_t)spPow(2, l))
+		if (groups[i].lmsD.size() == (size_t)spPow(2, l))
 		{
 			groups[i].position = 0;
 			if ( i % 2 != 0)
@@ -695,8 +696,8 @@ std::deque<int> PmergeMe::sortedDequeOfGroups(std::deque<PmergeMe::Group>& group
 		mergedAndSorted = pair[A];
 	}
 	for (size_t i = 0; i != mergedAndSorted.size(); i++)
-		if(!mergedAndSorted[i].lms.empty())
-			resD.push_back((mergedAndSorted[i].lms[0]));
+		if(!mergedAndSorted[i].lmsD.empty())
+			resD.push_back((mergedAndSorted[i].lmsD[0]));
 	return resD;
 }
 //========Helpers for vectors===================
