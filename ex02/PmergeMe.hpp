@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:54 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/30 19:13:18 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/30 19:51:02 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,9 @@ class PmergeMe
 		std::vector<int> primaryVec(char* argv[], int argc);
 		std::deque<int> primaryDeq(char* argv[], int argc);
 		//=======print the messages=================================================================
-		void printBeforeAndAfter(char* argv[], int argc);
-		void printVectorTime(char* argv[], int argc);
-		void printDequeTime(char* argv[], int argc);
+		void printBeforeAndAfter(char* argv[], int argc, int summary);
+		void printVectorTime(char* argv[], int argc, int summary);
+		void printDequeTime(char* argv[], int argc, int summary);
 		//=======trial helpers======================================================================
 		std::vector<int> fastSort(const std::vector<int>);
 		std::deque<int> fastSort(const std::deque<int>);

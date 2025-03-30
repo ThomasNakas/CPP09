@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:47 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/30 19:21:44 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/30 20:40:23 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,39 +157,71 @@ std::deque<int> PmergeMe::primaryDeq(char* argv[], int argc)
 };
 //========Debugging Functions===================
 //========Print The Messages Functions==========
-void PmergeMe::printBeforeAndAfter(char* argv[], int argc)
+void PmergeMe::printBeforeAndAfter(char* argv[], int argc, int summary)
 {
-	std::cout << "Before: ";
-	for (int i = 1; i != argc; i++)
-		std::cout << argv[i]<< " ";
-	std::cout << "\n";
-	std::cout << "After:  ";
 	std::vector<int> pr;
 	for (int i = 1; i != argc; i++)
 		pr.push_back(std::stoi(argv[i]));
-	std::vector<int> pr2 = fastSort(pr);
-	std::cout << pr2;
-	std::cout << std::endl;
+	std::vector<int> prSort = fastSort(pr);
+	if (summary == NO)
+	{
+		std::cout << "Before: ";
+		for (int i = 1; i != argc; i++)
+			std::cout << std::stoi(argv[i]) << " ";
+		std::cout << "\n";
+		std::cout << "After:  ";
+		std::cout << prSort;
+		std::cout << std::endl;
+	}
+	else
+	{
+		std::cout << "//==================Summarized version===================//\n";
+		std::cout << "Before: ";
+		for (int i = 1; i != std::min(argc, 7); i++)
+			std::cout << std::stoi(argv[i])<< " ";
+		if (argc >= 7)
+			std::cout << ". . .";
+		std::cout << "\n";
+		std::cout << "After:  ";
+		for (int i = 1; i != std::min(argc, 7); i++)
+			std::cout << prSort[i]<< " ";
+		if (argc >= 7)
+			std::cout << ". . .";
+		std::cout << std::endl;
+		
+	}
 };
-void PmergeMe::printVectorTime(char* argv[], int argc)
+void PmergeMe::printVectorTime(char* argv[], int argc, int summary)
 {
 	std::vector<int> res;
 	auto startVec = std::chrono::high_resolution_clock::now();
 	res = primaryVec(argv, argc);
 	auto endVec = std::chrono::high_resolution_clock::now();
-	auto durationVec = std::chrono::duration_cast<std::chrono::nanoseconds>(endVec - startVec); //I need to add a count at the end when I'm printing
-	std::cout <<"Time to process a range of " << res.size() << " elements with std::vector["
-				<< res << "] : " << std::fixed << durationVec.count() / 1000.0 << " us" << std::endl;
+	auto durationVec = std::chrono::duration_cast<std::chrono::microseconds>(endVec - startVec); //I need to add a count at the end when I'm printing
+	std::vector<int> resSort;
+	for (int i = 0; i!= (std::min((int)res.size(), 7));i++)
+		resSort.push_back(res[i]);
+	std::cout <<"Time to process a range of " << res.size()
+	<< " elements with std::vector[";
+	(summary == NO) ? (std::cout << res) : (std::cout << resSort << ". . .");
+	std::cout << "] : " 
+	<< std::fixed << durationVec.count() / 1000.0 << " us" << std::endl;
 };
-void PmergeMe::printDequeTime(char* argv[], int argc)
+void PmergeMe::printDequeTime(char* argv[], int argc, int summary)
 {
 	std::deque<int> resD;
 	auto startDeque = std::chrono::high_resolution_clock::now();
 	resD = primaryDeq(argv, argc);
 	auto endDeque = std::chrono::high_resolution_clock::now();
-	auto durationDeque = std::chrono::duration_cast<std::chrono::microseconds>(endDeque - startDeque); // I need to use the count() at the end
-	std::cout <<"Time to process a range of " << resD.size() << " elements with std::deque ["
-				<< resD << "] : " << std::fixed << durationDeque.count() / 1000.0 << " us" << std::endl;
+	auto durationDeque = std::chrono::duration_cast<std::chrono::microseconds>(endDeque - startDeque);
+	std::deque<int> resSortD;
+	for (int i = 0; i!= (std::min((int)resD.size(), 7));i++)
+		resSortD.push_back(resD[i]);
+	std::cout <<"Time to process a range of " << resD.size()
+	<< " elements with std::deque [";
+	(summary == NO) ? (std::cout << resD) : (std::cout << resSortD << ". . .");
+	std::cout << "] : " 
+	<< std::fixed << durationDeque.count() / 1000.0 << " us" << std::endl;
 };
 //========Debugging Functions===================
 //----->vectors<-------
