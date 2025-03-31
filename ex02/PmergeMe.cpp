@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:47 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/31 02:41:12 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/31 17:34:33 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,30 @@ PmergeMe& PmergeMe::operator=(const PmergeMe& other)
 	(void)other;
 	return *this;
 };
+//========IntW  Default Functions=============
+PmergeMe::IntW::IntW(){};
+PmergeMe::IntW::IntW(const int& i, const int& times) : _i(i), _times(times){};
+PmergeMe::IntW::IntW(const IntW& other) : _i(other._i), _times(other._times){};
+std::ostream& operator<<(std::ostream& os, PmergeMe::IntW& iW)
+	{
+		for (int i = 0; i != iW._times; i++)
+		{
+			os << iW._i;
+			if (i != iW._times-1)
+				os << " ";
+		}
+		return os;
+	}
+PmergeMe::IntW& PmergeMe::IntW::operator=(const IntW& other)
+{
+	if (this != &other)
+	{
+		_i =other._i;
+		_times= other._times;
+	}
+	return *this;
+};
+PmergeMe::IntW::~IntW(){};
 //========Group Default Functions=============
 PmergeMe::Group::Group() : position(0), sequence(0){};
 PmergeMe::Group::Group(const std::vector<int>& lms) :
@@ -372,14 +396,6 @@ void PmergeMe::BinarySortOne(std::vector<Group>& vec,
 	size_t spPower = (size_t)(spPow(2, l));
 	if (element.lms.size() == spPower)
 	{
-		// auto pos = std::upper_bound
-		// (
-		// 	vec.begin() + start, 
-		// 	vec.begin() + end, element,
-		// 	[](const Group& a, const Group& b)
-		// 		{return a.repr < b.repr;}
-		// );
-		// vec.insert(pos,element);
 		while(end - start > 1)
 		{
 			int middle = (end - start) /  2 + start;
@@ -662,16 +678,10 @@ std::vector<int> PmergeMe::sortedVectorOfGroups(std::vector<PmergeMe::Group>& gr
 				indAEnd = findIndexInPairFromPosition(pair[A], actualJValue, A) - 1;
 				if (maxPosA < actualJValue)
 					indAEnd = pair[A].size() - 1;
-				indAStart =  std::min((lastInsPos - 1 > 0)? lastInsPos - 1 : 0, findIndexInPairFromPosition(pair[A], JnMinusOne, A));
+				indAStart =  std::min((lastInsPos - 1 > 0)? lastInsPos - 1 : 0,
+				findIndexInPairFromPosition(pair[A], JnMinusOne, A));
 				if (maxPosA < JnMinusOne)
 					indAStart = 0;
-				// int current_start = pair[A][indAStart].repr;
-				// while(indAStart > 0 && current_start == pair[A][indAStart - 1].repr)
-				// 	indAStart--;
-				// int current_end = pair[A][indAEnd].repr ;
-				// int pairSize = (int)pair[A].size();
-				// while(indAEnd<pairSize - 1 && current_end == pair[A][indAEnd + 1].repr)
-				// 	indAEnd++;
 				Group currentValueInB = pair[B][indB];
 				BinarySortOne(pair[A], indAStart, indAEnd, currentValueInB);
 				pair[B].erase(pair[B].begin() + indB);
@@ -723,19 +733,13 @@ std::deque<int> PmergeMe::sortedDequeOfGroups(std::deque<PmergeMe::Group>& group
 			maxPosA = findMaxPos(pair[A], A);
 			while(indB>=0)
 			{
-				//if Jn > max_size >= Jn-1
-				// max >= Jn > Jn-1
-				// Jn > Jn -1 >= max
 				indAEnd = findIndexInPairFromPosition(pair[A], actualJValue, A) - 1;
 				if (maxPosA < actualJValue)
 					indAEnd = pair[A].size() - 1;
-				indAStart =  std::min((lastInsPos - 1 > 0)? lastInsPos - 1 : 0, findIndexInPairFromPosition(pair[A], JnMinusOne, A));
+				indAStart =  std::min((lastInsPos - 1 > 0)? lastInsPos - 1 : 0,
+				findIndexInPairFromPosition(pair[A], JnMinusOne, A));
 				if (maxPosA < JnMinusOne)
 					indAStart = 0;
-				// while(indAStart > 0 && pair[A][indAStart].repr == pair[A][indAStart - 1].repr)
-				// 	indAStart--;
-				// while(indAEnd<(int)pair[A].size() - 1 && pair[A][indAEnd].repr == pair[A][indAEnd + 1].repr)
-				// 	indAEnd++;
 				BinarySortOne(pair[A], indAStart, indAEnd, pair[B][indB]);
 				pair[B].erase(pair[B].begin() + indB);
 				actualJValue--;

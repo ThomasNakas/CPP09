@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:54 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/30 21:49:27 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/31 17:33:46 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,19 +33,16 @@ class PmergeMe
 		enum type{A,B};
 		enum print{YES, NO};
 		// Integers with print value
-		// struct IntW
-		// {
-		// 	int i;
-		// 	int times;
-		// 	IntW();
-		// 	IntW(const int& i, const int& elems);
-		// 	IntW(const IntW& other);
-		// 	IntW& operator=(const IntW& other);
-		// 	~IntW();
-		// };
-		//I need to check every time if the near by numbers are the same
-		// inside the vectors if the elements are same
-		// In the beggining If I have near by numbers that are the same
+		struct IntW
+		{
+			int _i;
+			int _times;
+			IntW();
+			IntW(const int& i, const int& elems);
+			IntW(const IntW& other);
+			IntW& operator=(const IntW& other);
+			~IntW();
+		};
 		struct Group
 		{
 			std::vector<int> lms;
@@ -163,6 +160,4 @@ class PmergeMe
 			os << dq[i] << " ";
 		return os;
 	};
-	// I need a transition from int to sequence
-	// which sequence has insice the value the position
-	// in the sequence and the type of the sequence
+	std::ostream& operator<<(std::ostream& os, PmergeMe::IntW& iW);
