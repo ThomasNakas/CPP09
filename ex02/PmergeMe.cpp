@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:47 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/30 20:40:23 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/31 02:41:12 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -368,34 +368,49 @@ std::deque<PmergeMe::Group> PmergeMe::pairMergeSorting(std::deque<PmergeMe::Grou
 void PmergeMe::BinarySortOne(std::vector<Group>& vec, 
 	int start, int end, Group element)
 {
-	int middle = -1;
-	if (!(element.lms.empty()) && (element.lms.size() == (size_t)spPow(2, l)))
+	if (element.lms.empty()) return;
+	size_t spPower = (size_t)(spPow(2, l));
+	if (element.lms.size() == spPower)
 	{
+		// auto pos = std::upper_bound
+		// (
+		// 	vec.begin() + start, 
+		// 	vec.begin() + end, element,
+		// 	[](const Group& a, const Group& b)
+		// 		{return a.repr < b.repr;}
+		// );
+		// vec.insert(pos,element);
 		while(end - start > 1)
 		{
-			middle = (end - start) /  2 + start;
+			int middle = (end - start) /  2 + start;
 			if (element.repr > vec[middle].repr)
 				start = middle;
 			else
 				end = middle;
 		}
-		if (element.repr <= vec[start].repr)
+		int start_repr = vec[start].repr;
+		int end_repr = vec[end].repr;
+		if (element.repr <=start_repr)
 		{
-			while (start > 0 && (vec[start].repr == vec[start - 1].repr))
+			int current_repr = vec[start].repr;
+			while (start > 0 && (current_repr == vec[start - 1].repr))
 				start--;
 			vec.insert(vec.begin() + start,element);
 		}
-		else if (element.repr > vec[start].repr && element.repr <= vec[end].repr)
+		else if (element.repr <= end_repr)
 		{
-			while (start < (int)vec.size() - 2 && vec[start].repr == vec[start + 1].repr)
+			int current_repr = vec[start].repr;
+			while (start < (int)vec.size() - 2 && current_repr == vec[start + 1].repr)
 				start++;
-			while (end > 1 && vec[end].repr == vec[end - 1].repr)
+			current_repr = vec[end].repr;
+			while (end > 1 && current_repr == vec[end - 1].repr)
 				end--;
 			vec.insert(vec.begin() + start + 1,element);
 		}
 		else
 		{
-			while (end !=(int)vec.size() - 2 && vec[end].repr == vec[end + 1].repr)
+			int current_repr = vec[end].repr ;
+			while (end !=(int)vec.size() - 2 && current_repr == vec[end + 1].repr)
 				end++;
 			if (end != (int)vec.size() - 1)
 				vec.insert(vec.begin() + end + 1 ,element);
@@ -634,7 +649,7 @@ std::vector<int> PmergeMe::sortedVectorOfGroups(std::vector<PmergeMe::Group>& gr
 		insertBOneToAVec(pair[B], pair[A]);
 		lastInsPos=0;
 		pair[B].erase(pair[B].begin());
-		while (!pair[B].empty() && pair[B][0].size ==spPow(2,l))
+		while (!pair[B].empty() && pair[B][0].size ==(int)spPow(2,l))
 		{
 			Jn = Jacobsthal(n);
 			JnMinusOne = Jacobsthal(n - 1) < 0 ? 0 : Jacobsthal(n - 1);
@@ -650,18 +665,23 @@ std::vector<int> PmergeMe::sortedVectorOfGroups(std::vector<PmergeMe::Group>& gr
 				indAStart =  std::min((lastInsPos - 1 > 0)? lastInsPos - 1 : 0, findIndexInPairFromPosition(pair[A], JnMinusOne, A));
 				if (maxPosA < JnMinusOne)
 					indAStart = 0;
-				while(indAStart > 0 && pair[A][indAStart].repr == pair[A][indAStart - 1].repr)
-					indAStart--;
-				while(indAEnd<(int)pair[A].size() - 1 && pair[A][indAEnd].repr == pair[A][indAEnd + 1].repr)
-					indAEnd++;
-				BinarySortOne(pair[A], indAStart, indAEnd, pair[B][indB]);
+				// int current_start = pair[A][indAStart].repr;
+				// while(indAStart > 0 && current_start == pair[A][indAStart - 1].repr)
+				// 	indAStart--;
+				// int current_end = pair[A][indAEnd].repr ;
+				// int pairSize = (int)pair[A].size();
+				// while(indAEnd<pairSize - 1 && current_end == pair[A][indAEnd + 1].repr)
+				// 	indAEnd++;
+				Group currentValueInB = pair[B][indB];
+				BinarySortOne(pair[A], indAStart, indAEnd, currentValueInB);
 				pair[B].erase(pair[B].begin() + indB);
 				actualJValue--;
 				indB = findIndexInPairFromPosition(pair[B], actualJValue, B);
 			}
 			n++;
 		}
-		while(!pair[B].empty() && pair[B][0].size !=spPow(2,n))
+		int spPower = (int)spPow(2,n);
+		while(!pair[B].empty() && pair[B][0].size != spPower)
 		{
 			if (pair[B].empty()) break;
 			pair[A].push_back(pair[B][0]);
@@ -669,7 +689,8 @@ std::vector<int> PmergeMe::sortedVectorOfGroups(std::vector<PmergeMe::Group>& gr
 		}
 		mergedAndSorted = pair[A];
 	}
-	for (size_t i = 0; i != mergedAndSorted.size(); i++)
+	size_t mergedSize = mergedAndSorted.size();
+	for (size_t i = 0; i != mergedSize; i++)
 		if(!mergedAndSorted[i].lms.empty())
 			res.push_back((mergedAndSorted[i].lms[0]));
 	return res;
@@ -692,7 +713,7 @@ std::deque<int> PmergeMe::sortedDequeOfGroups(std::deque<PmergeMe::Group>& group
 		insertBOneToAVec(pair[B], pair[A]);
 		lastInsPos=0;
 		pair[B].erase(pair[B].begin());
-		while (!pair[B].empty() && pair[B][0].size ==spPow(2,l))
+		while (!pair[B].empty() && pair[B][0].size ==(int)spPow(2,l))
 		{
 			Jn = Jacobsthal(n);
 			JnMinusOne = Jacobsthal(n - 1) < 0 ? 0 : Jacobsthal(n - 1);
@@ -702,16 +723,19 @@ std::deque<int> PmergeMe::sortedDequeOfGroups(std::deque<PmergeMe::Group>& group
 			maxPosA = findMaxPos(pair[A], A);
 			while(indB>=0)
 			{
+				//if Jn > max_size >= Jn-1
+				// max >= Jn > Jn-1
+				// Jn > Jn -1 >= max
 				indAEnd = findIndexInPairFromPosition(pair[A], actualJValue, A) - 1;
 				if (maxPosA < actualJValue)
 					indAEnd = pair[A].size() - 1;
 				indAStart =  std::min((lastInsPos - 1 > 0)? lastInsPos - 1 : 0, findIndexInPairFromPosition(pair[A], JnMinusOne, A));
 				if (maxPosA < JnMinusOne)
 					indAStart = 0;
-				while(indAStart > 0 && pair[A][indAStart].repr == pair[A][indAStart - 1].repr)
-					indAStart--;
-				while(indAEnd<(int)pair[A].size() - 1 && pair[A][indAEnd].repr == pair[A][indAEnd + 1].repr)
-					indAEnd++;
+				// while(indAStart > 0 && pair[A][indAStart].repr == pair[A][indAStart - 1].repr)
+				// 	indAStart--;
+				// while(indAEnd<(int)pair[A].size() - 1 && pair[A][indAEnd].repr == pair[A][indAEnd + 1].repr)
+				// 	indAEnd++;
 				BinarySortOne(pair[A], indAStart, indAEnd, pair[B][indB]);
 				pair[B].erase(pair[B].begin() + indB);
 				actualJValue--;
@@ -719,7 +743,7 @@ std::deque<int> PmergeMe::sortedDequeOfGroups(std::deque<PmergeMe::Group>& group
 			}
 			n++;
 		}
-		while(!pair[B].empty() && pair[B][0].size !=spPow(2,n))
+		while(!pair[B].empty() && pair[B][0].size !=(int)spPow(2,n))
 		{
 			if (pair[B].empty()) break;
 			pair[A].push_back(pair[B][0]);
@@ -853,6 +877,6 @@ int	PmergeMe::jacobsthalIsExisitng(std::deque<PmergeMe::Group> gr, int jacobstha
 	return NO;
 }
 //=======Outside Functions======================
-int	spPow(int n1, int n2){return ((int)pow((long double)n1, (long double)n2));};
-int Jacobsthal(int n){return ((spPow(2, n) - spPow(-1, n))/3);};
+size_t	spPow(int n1, int n2){return ((size_t)pow((long double)n1, (long double)n2));};
+int Jacobsthal(int n){return (((int)spPow(2, n) -(int)spPow(-1, n))/3);};
 int spMin(int a, int b){return (a < b ? a : b);}

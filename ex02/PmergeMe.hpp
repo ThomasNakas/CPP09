@@ -6,7 +6,7 @@
 /*   By: tnakas <tnakas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 19:52:54 by tnakas            #+#    #+#             */
-/*   Updated: 2025/03/30 19:51:02 by tnakas           ###   ########.fr       */
+/*   Updated: 2025/03/30 21:49:27 by tnakas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,20 @@ class PmergeMe
 		int minIns = 2147483647;
 		enum type{A,B};
 		enum print{YES, NO};
+		// Integers with print value
+		// struct IntW
+		// {
+		// 	int i;
+		// 	int times;
+		// 	IntW();
+		// 	IntW(const int& i, const int& elems);
+		// 	IntW(const IntW& other);
+		// 	IntW& operator=(const IntW& other);
+		// 	~IntW();
+		// };
+		//I need to check every time if the near by numbers are the same
+		// inside the vectors if the elements are same
+		// In the beggining If I have near by numbers that are the same
 		struct Group
 		{
 			std::vector<int> lms;
@@ -130,7 +144,7 @@ class PmergeMe
 		void protectedErase(std::deque<std::deque<Group>>&, int index);
 		int	jacobsthalIsExisitng(std::deque<Group> gr, int jacobsthal);
 	};
-	int	spPow(int n1, int n2);
+	size_t	spPow(int n1, int n2);
 	int Jacobsthal(int n);
 	int spMin (int a, int b);
 	// for all data type vectors
