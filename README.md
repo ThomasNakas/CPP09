@@ -1,5 +1,3 @@
-Certainly! Here's a clean and professional version of your paragraph for inclusion in your `README.md` file:
-
 ---
 
 ### 🧠 Implementation Notes
