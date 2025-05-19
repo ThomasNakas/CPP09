@@ -1,6 +1,6 @@
 ---
 
-### 🧠 Implementation Notes
+### 🧠 Implementation Notes ex02
 
 For this exercise, I implemented a custom sorting algorithm based on **Ford–Johnson merge-insertion sort**, integrating the **Jacobsthal sequence** to optimize the binary insertion process. This hybrid approach enhances performance while maintaining compliance with the constraints of the exercise.
 
