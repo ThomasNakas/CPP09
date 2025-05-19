@@ -1,10 +1,11 @@
 ---
 
-### 🧠 Implementation Notes ex02(PMergeMe)
+### 🧠 Implementation Notes – ex02 (PmergeMe)
 
-For this exercise, I implemented a custom sorting algorithm based on **Ford–Johnson merge-insertion sort**, integrating the **Jacobsthal sequence** to optimize the binary insertion process. This hybrid approach enhances performance while maintaining compliance with the constraints of the exercise.
+For this exercise, I implemented a custom sorting algorithm based on the **Ford–Johnson merge-insertion sort**, incorporating the **Jacobsthal sequence** to guide the binary insertion phase. This approach not only enhances performance but also deepened my understanding of non-trivial sorting algorithms beyond standard library implementations.
 
-Additionally, I customized the output formatting to improve clarity and assist with the evaluation process. To support a thorough and automated review, I also developed a **Bash script** that tests a wide range of scenarios—including valid inputs, edge cases, and error conditions—ensuring the robustness and correctness of the program.
+Rather than relying on built-in sorting functions, I built my own logic for the binary insertion process following the Jacobsthal sequence. This allowed me to fully grasp the mechanics of efficient comparison and insertion steps within the sorting algorithm.
+
+To support clarity during evaluation, I customized the printed output messages to clearly reflect each step of the process. Furthermore, I created a **Bash script** that runs a comprehensive suite of test cases, covering valid sequences, error handling, and a variety of input sizes. This ensures thorough verification of both functionality and edge cases.
 
 ---
-
