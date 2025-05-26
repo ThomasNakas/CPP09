@@ -1,5 +1,6 @@
 ---
-### 🔢 ex00 - Bitcoin Exchange
+
+# 🔢 ex00 - Bitcoin Exchange
 This project involved a straightforward implementation of C++’s `<filesystem>`, `<sstream>`, and `<map>` libraries to build a Bitcoin exchange rate evaluator. The main goal was to calculate the real-world value of a user's Bitcoin holdings based on historical exchange rates tied to specific dates.
 
 The solution reads and parses a `.csv` database of Bitcoin prices and compares them against user-specified dates and values. Parsing logic was carefully implemented to detect and report invalid formats, missing data, and out-of-bounds dates. Custom error handling ensures robustness, while a clean interface allows easy testing with various inputs.
