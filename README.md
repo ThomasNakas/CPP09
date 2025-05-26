@@ -105,7 +105,7 @@ Stack trace: [3] → Final result ✔
 
 
 ---
-### 🧠 ex02 - PmergeMe
+# 🔢 ex02 - PmergeMe
 
 > A custom implementation inspired by **Ford–Johnson merge-insertion sort**, combined with **Jacobsthal sequence logic** for optimized binary insertions.
 
